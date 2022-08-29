@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Didomi Notice Sandbox</title>
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div id="container">
+
+      <div class="top_content">
+        <div id="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 38 38" fill="none">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M30.1503 31.6133L25.0508 20.8133L35.5323 19.2244C35.471 24.1083 33.4108 28.5005 30.1503 31.6133ZM17.709 36.3133L23.8489 22.1617L28.8432 32.74C25.9795 34.9706 22.4133 36.3133 18.5365 36.3133H17.709ZM26.1902 3.55993L14.7238 8.06683L3.91016 1.68683H18.5368C21.2912 1.68683 23.8857 2.37164 26.1902 3.55993ZM31.548 7.8727C33.7457 10.531 35.1664 13.8681 35.4704 17.5275L25.3691 19.059L31.548 7.8727ZM14.3828 27.0886L21.9766 22.2992L16.5929 34.7117L14.3828 27.0886ZM12.9684 28.1647L15.3309 36.3132H3.15625L12.9684 28.1647ZM1.65625 18.5428L12.0814 26.7318L1.65625 35.3813V18.5428ZM23.681 18.6694L16.0293 9.36125L28.0317 4.6435C28.865 5.21614 29.6387 5.87059 30.3586 6.57985L23.681 18.6694ZM21.7963 19.0035L3.38477 16.3444L14.456 10.0749L21.7963 19.0035ZM13.4607 25.6852L3.81836 18.1101L21.4363 20.6554L13.4607 25.6852ZM12.9736 8.98424L1.65625 15.3929V2.30653L12.9736 8.98424ZM18.5366 0H0V38H18.5366C28.8276 38 37.2 29.477 37.2 19C37.2 8.52297 28.8276 0 18.5366 0Z" fill="#dfdfdf"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="input_text_wrapper">
+            <input type="text" id="apikey" data-qp="apiKey" required>
+            <span>Api Key</span>
+          </div>
+
+          <div class="input_text_wrapper">
+            <input type="text" id="noticeid" data-qp="notice_id" required>
+            <span>Notice ID</span>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="toggle_wrapper">
+        <div class="toggle_container">
+          <label class="switch">
+            <input name="global" data-qp="global" type="checkbox">
+            <span class="slider round"></span>
+          </label>
+          <div class="toggle_value_container">
+            <span>GDPR applies globally</span>
+          </div>
+        </div>
+
+        <div class="toggle_container">
+          <label class="switch">
+            <input name="staging" data-qp="staging" type="checkbox">
+            <span class="slider round"></span>
+          </label>
+          <div class="toggle_value_container">
+            <span>Staging environment</span>
+          </div>
+        </div>
+
+        <div class="toggle_container">
+          <label class="switch">
+            <input name="global" data-qp="apply_conf" type="checkbox">
+            <span class="slider round"></span>
+          </label>
+          <div class="toggle_value_container">
+            <span>Apply didomiConfig (reload to see changes)</span>
+            <div id="textarea_wrapper">
+              <textarea data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" spellcheck="false"></textarea>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+      <div id="controls">
+        <div onclick="javascript:Didomi ? Didomi.notice.show() : alert('Didomi is not there')">Show notice</div>
+        <div onclick="javascript:Didomi ? Didomi.reset() : alert('Didomi is not there')">Reset Status</div>
+      </div>
+
+    </div>
+
+
+    <script src="scripts/sdk.js"></script>
+    <script src="scripts/script.js"></script>
+
+  </body>
+</html>

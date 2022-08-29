@@ -1,0 +1,287 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+*{
+	box-sizing:border-box;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+:root{
+	--text: #686868;
+	--light-bg: #f1f1f1;
+	--border: #dfdfdf;
+	--JSONBG: #202124;
+	--JSONColor: #37d0c3;
+	--JSONColorInvalid: #e06c6e;
+}
+
+body{
+  background-color:var(--light-bg);
+  font-family: "ProximaNovaCond", arial;
+}
+#container{
+  margin: 30px auto 0 auto;
+  background-color: white;
+  border-radius:5px;
+  padding:20px;
+  box-shadow:0px 0px 5px rgba(0,0,0,0.2);
+	max-width: 550px;
+}
+.top_content{
+	display:flex;
+	align-items:center;
+}
+#logo{
+	width:70px;
+	height:70px;
+	margin:0 40px 0 0;
+}
+.info{
+	color:var(--border);
+	width:100%;
+}
+.info #org{
+	margin: 0 0 0 10px;
+	color:var(--text);
+}
+.input_text_wrapper{
+		position:relative;
+}
+.input_text_wrapper span{
+	position:absolute;
+	transition-duration:0.3s;
+	top:14px;
+	left:15px;
+	font-size:1rem;
+	pointer-events: none;
+}
+.input_text_wrapper input:valid + span, .input_text_wrapper input:focus + span{
+	position: absolute;
+  top: -15px;
+  left: 15px;
+  font-size: 0.8rem;
+}
+
+
+input{
+	display: block;
+	width: 100%;
+	margin: 30px 0;
+	outline: none;
+	border: 1px solid var(--border);
+	padding: 12px 10px;
+	border-radius: 5px;
+	font-size: 16px;
+	color: var(--text);
+}
+#controls{
+  display:flex;
+  justify-content: space-between;
+  margin: 40px 0 0 0;
+}
+#controls > div{
+	transition-duration:0.3s;
+	border: 1px solid var(--border);
+  text-align: center;
+  padding: 16px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 30%;
+  margin: 0 10px;
+  background-color: var(--light-bg);
+	color: var(--text);
+}
+#controls > div:hover{
+	color:#000000;
+	background-color:#FFFFFF;
+}
+
+/*Toggle*/
+.toggle_wrapper{
+
+}
+.toggle_container{
+	display: flex;
+	margin:25px 0;
+}
+.toggle_container > span{
+	color: var(--text);
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  min-width: 45px;
+  height: 27px;
+	margin:0 33px 0 33px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+	margin:0;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--light-bg);
+  -webkit-transition: .4s;
+  transition: .4s;
+	border:1px solid var(--border);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 19px;
+  width: 19px;
+  left: 4px;
+  bottom: 3px;
+  background-color: #FFFFFF;;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: var(--text);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(16px);
+  -ms-transform: translateX(16px);
+  transform: translateX(16px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+/*End Toggle*/
+
+/*Textaera*/
+#conf_wrapper{
+	margin: 30px 0 0 0;
+}
+#textarea_wrapper{
+	position:relative;
+	transition-duration:0.6s;
+	opacity:1;
+	margin:20px 0 0 0;
+}
+#format_json{
+	width:30px;
+	height:30px;
+	position:absolute;
+	top:2px;
+	right:2px;
+	background-color:#000000;
+	padding:4px;
+	cursor:pointer;
+	border-radius:0px 5px 0px 0px;
+	z-index:2;
+	border:1px solid #686868;
+}
+.toggle_container[data-checked='false'] + #textarea_wrapper{
+	opacity:0.3;
+}
+
+.toggle_container[data-checked="false"] .toggle_value_container > span{
+	color: var(--border);
+}
+.toggle_container > span{
+	color: var(--text);
+}
+.toggle_value_container{
+	padding-top:6px;
+	width:100%;
+}
+textarea{
+	position:relative;
+	display:block;
+	width:100%;
+	min-height:200px;
+	resize:none;
+	color: var(--text);
+	padding: 10px 20px;
+	border-radius:5px;
+	border-width: 0px;
+	border:1px solid var(--border)
+}
+textarea:focus-visible{
+	outline: none;
+}
+textarea.invalid{
+	border-color:var(--JSONColorInvalid)
+}
+
+
+
+@media (max-width: 700px) {
+	#container{
+		max-width:90%;
+	}
+	#controls{
+		display:block;
+	}
+	#controls > div{
+		width:100%;
+		margin:5px 0;
+	}
+}
