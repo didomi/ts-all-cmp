@@ -1,91 +1,116 @@
-
 function writeSDK(apikey, noticeid, global, staging) {
-  var _staging = staging ? 'staging.' : '';
+  var _staging = staging ? "staging." : "";
   window.gdprAppliesGlobally = global;
-  (function() {
-    function r() {
-      if (!window.frames.__cmpLocator) {
+  (function () {
+    function n(e) {
+      if (!window.frames[e]) {
         if (document.body && document.body.firstChild) {
-          var e = document.body;
-          var t = document.createElement("iframe");
-          t.style.display = "none";
-          t.name = "__cmpLocator";
-          t.title = "cmpLocator";
-          e.insertBefore(t, e.firstChild)
+          var t = document.body;
+          var r = document.createElement("iframe");
+          r.style.display = "none";
+          r.name = e;
+          r.title = e;
+          t.insertBefore(r, t.firstChild);
         } else {
-          setTimeout(r, 5)
+          setTimeout(function () {
+            n(e);
+          }, 5);
         }
       }
     }
-
-    function e(e, t, r) {
-      if (typeof r !== "function") {
-        return
+    function e(r, a, o, c, s) {
+      function e(e, t, r, n) {
+        if (typeof r !== "function") {
+          return;
+        }
+        if (!window[a]) {
+          window[a] = [];
+        }
+        var i = false;
+        if (s) {
+          i = s(e, n, r);
+        }
+        if (!i) {
+          window[a].push({ command: e, version: t, callback: r, parameter: n });
+        }
       }
-      if (!window.__cmpBuffer) {
-        window.__cmpBuffer = []
+      e.stub = true;
+      e.stubVersion = 2;
+      function t(n) {
+        if (!window[r] || window[r].stub !== true) {
+          return;
+        }
+        if (!n.data) {
+          return;
+        }
+        var i = typeof n.data === "string";
+        var e;
+        try {
+          e = i ? JSON.parse(n.data) : n.data;
+        } catch (t) {
+          return;
+        }
+        if (e[o]) {
+          var a = e[o];
+          window[r](
+            a.command,
+            a.version,
+            function (e, t) {
+              var r = {};
+              r[c] = { returnValue: e, success: t, callId: a.callId };
+              n.source.postMessage(i ? JSON.stringify(r) : r, "*");
+            },
+            a.parameter,
+          );
+        }
       }
-      if (e === "ping") {
-        r({
-          gdprAppliesGlobally: window.gdprAppliesGlobally,
-          cmpLoaded: false
-        }, true)
-      } else {
-        window.__cmpBuffer.push({
-          command: e,
-          parameter: t,
-          callback: r
-        })
-      }
-    }
-    e.stub = true;
-
-    function t(a) {
-      if (!window.__cmp || window.__cmp.stub !== true) {
-        return
-      }
-      if (!a.data) {
-        return
-      }
-      var n = typeof a.data === "string";
-      var e;
-      try {
-        e = n ? JSON.parse(a.data) : a.data
-      } catch (t) {
-        return
-      }
-      if (e.__cmpCall) {
-        var o = e.__cmpCall;
-        window.__cmp(o.command, o.parameter, function(e, t) {
-          var r = {
-            __cmpReturn: {
-              returnValue: e,
-              success: t,
-              callId: o.callId
-            }
-          };
-          a.source.postMessage(n ? JSON.stringify(r) : r, "*")
-        })
-      }
-    }
-    if (typeof window.__cmp !== "function") {
-      window.__cmp = e;
-      if (window.addEventListener) {
-        window.addEventListener("message", t, false)
-      } else {
-        window.attachEvent("onmessage", t)
+      if (typeof window[r] !== "function") {
+        window[r] = e;
+        if (window.addEventListener) {
+          window.addEventListener("message", t, false);
+        } else {
+          window.attachEvent("onmessage", t);
+        }
       }
     }
-    r()
+    e("__tcfapi", "__tcfapiBuffer", "__tcfapiCall", "__tcfapiReturn");
+    n("__tcfapiLocator");
+    (function (e, t) {
+      var r = document.createElement("link");
+      r.rel = "preconnect";
+      r.as = "script";
+      var n = document.createElement("link");
+      n.rel = "dns-prefetch";
+      n.as = "script";
+      var i = document.createElement("link");
+      i.rel = "preload";
+      i.as = "script";
+      var a = document.createElement("script");
+      a.id = "spcloader";
+      a.type = "text/javascript";
+      a["async"] = true;
+      a.charset = "utf-8";
+      var o = "https://sdk." + _staging + "privacy-center.org/" + e + "/loader.js?target_type=notice&target=" + t;
+      if (window.didomiConfig && window.didomiConfig.user) {
+        var c = window.didomiConfig.user;
+        var s = c.country;
+        var d = c.region;
+        if (s) {
+          o = o + "&country=" + s;
+          if (d) {
+            o = o + "&region=" + d;
+          }
+        }
+      }
+      r.href = "https://sdk." + _staging + "privacy-center.org/";
+      n.href = "https://sdk." + _staging + "privacy-center.org/";
+      i.href = o;
+      a.src = o;
+      var f = document.getElementsByTagName("script")[0];
+      f.parentNode.insertBefore(r, f);
+      f.parentNode.insertBefore(n, f);
+      f.parentNode.insertBefore(i, f);
+      f.parentNode.insertBefore(a, f);
+    })(apikey, noticeid);
   })();
-  (function(e, t) {
-    var r = document.createElement("script");
-    r.id = "spcloader";
-    r.type = "text/javascript";
-    r.async = true;
-    r.src = "https://sdk." + _staging + "privacy-center.org/" + e + "/loader.js?target_type=notice&target=" + t;
-    r.charset = "utf-8";
-    var a = document.getElementsByTagName("script")[0];
-    a.parentNode.insertBefore(r, a)
-  })(apikey, noticeid);
 }
