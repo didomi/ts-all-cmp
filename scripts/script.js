@@ -1,10 +1,13 @@
 var textArea = document.getElementsByTagName("textarea")[0];
 
 function setCheckedStatus(el) {
-  if (el.checked) {
-    el.closest(".toggle_container").setAttribute("data-checked", "true");
-  } else {
-    el.closest(".toggle_container").setAttribute("data-checked", "false");
+  const toggleContainer = el.closest(".toggle_container");
+  if (toggleContainer) {
+    if (el.checked) {
+      toggleContainer.setAttribute("data-checked", "true");
+    } else {
+      toggleContainer.setAttribute("data-checked", "false");
+    }
   }
 }
 
@@ -98,13 +101,13 @@ textArea.addEventListener("keyup", function () {
 });
 
 window.onload = function () {
+  if (new URL(document.location.href).searchParams.get("config") && parseInt(new URL(document.location.href).searchParams.get("apply_conf"))) {
+    window.didomiConfig = JSON.parse(atob(new URL(document.location.href).searchParams.get("config")));
+  }
+
   if (new URL(document.location.href).searchParams.get("apiKey") && new URL(document.location.href).searchParams.get("notice_id")) {
     updateInputs();
     makeNotice();
-  }
-
-  if (new URL(document.location.href).searchParams.get("config") && parseInt(new URL(document.location.href).searchParams.get("apply_conf"))) {
-    window.didomiConfig = JSON.parse(atob(new URL(document.location.href).searchParams.get("config")));
   }
 
   Array.from(document.querySelectorAll('[type="checkbox"][data-qp]')).forEach(function (el) {
