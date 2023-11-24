@@ -171,19 +171,26 @@ body {
 .input_text_wrapper span {
   position: absolute;
   transition-duration: 0.3s;
-  top: 14px;
-  left: 15px;
+  top: 15px;
+  left: 12px;
   font-size: 1rem;
   pointer-events: none;
 }
 .input_text_wrapper input:valid + span,
 .input_text_wrapper input:focus + span {
   position: absolute;
-  top: -15px;
-  left: 15px;
+  top: -17px;
+  left: 12px;
   font-size: 0.8rem;
 }
-
+.input_wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+.input_wrapper .input_text_wrapper input:focus + span {
+  top: -18px;
+  left: 10px;
+}
 input {
   display: block;
   width: 100%;
@@ -194,6 +201,9 @@ input {
   border-radius: 5px;
   font-size: 16px;
   color: var(--text);
+}
+.input_wrapper .input_text_wrapper input {
+  margin: 0;
 }
 #controls {
   display: flex;
