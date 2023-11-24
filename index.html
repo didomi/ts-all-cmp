@@ -53,6 +53,18 @@
             <input type="text" id="noticeid" data-qp="notice_id" required />
             <span>Notice ID</span>
           </div>
+
+          <div class="input_wrapper">
+            <div class="input_text_wrapper">
+              <input type="text" id="userCountry" data-qp="country" required />
+              <span>User country</span>
+            </div>
+
+            <div class="input_text_wrapper">
+              <input type="text" id="userRegion" data-qp="region" required />
+              <span>User region</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -92,8 +104,8 @@
       </div>
 
       <div id="controls">
-        <div onclick="javascript:Didomi ? Didomi.notice.show() : alert('Didomi is not there')">Show notice</div>
-        <div onclick="javascript:Didomi ? Didomi.reset() : alert('Didomi is not there')">Reset status</div>
+        <div onclick="javascript:Didomi ? Didomi.notice.show() : console.log('Didomi is not there')">Show notice</div>
+        <div onclick="javascript:Didomi ? (() => { Didomi.reset(); location.reload(); })() : console.log('Didomi is not there')">Reset status</div>
       </div>
     </div>
 

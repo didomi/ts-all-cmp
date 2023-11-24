@@ -1,4 +1,4 @@
-function writeSDK(apikey, noticeid, global, staging) {
+function writeSDK(apikey, noticeid, userCountry, userRegion, global, staging) {
   var _staging = staging ? "staging." : "";
   window.gdprAppliesGlobally = global;
   (function () {
@@ -95,6 +95,15 @@ function writeSDK(apikey, noticeid, global, staging) {
         var c = window.didomiConfig.user;
         var s = c.country;
         var d = c.region;
+        if (s) {
+          o = o + "&country=" + s;
+          if (d) {
+            o = o + "&region=" + d;
+          }
+        }
+      } else if (userCountry) {
+        var s = userCountry;
+        var d = userRegion;
         if (s) {
           o = o + "&country=" + s;
           if (d) {

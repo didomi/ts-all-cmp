@@ -68,10 +68,12 @@ function updateInputs() {
 function makeNotice() {
   var apikey = new URL(document.location.href).searchParams.get("apiKey");
   var noticeid = new URL(document.location.href).searchParams.get("notice_id");
+  var userCountry = new URL(document.location.href).searchParams.get("country");
+  var userRegion = new URL(document.location.href).searchParams.get("region");
   var global = parseInt(new URL(document.location.href).searchParams.get("global")) ? true : false;
   var staging = parseInt(new URL(document.location.href).searchParams.get("staging")) ? true : false;
 
-  writeSDK(apikey, noticeid, global, staging);
+  writeSDK(apikey, noticeid, userCountry, userRegion, global, staging);
 }
 
 /* Custom JSON */
