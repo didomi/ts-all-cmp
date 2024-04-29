@@ -79,7 +79,6 @@ function makeNotice() {
 }
 
 /* Custom JSON */
-
 function prettyPrint() {
   var ugly = textArea.value;
   var obj = JSON.parse(ugly);
@@ -96,11 +95,20 @@ function isJSONvalid(text) {
   return true;
 }
 
+function autoFixJSON(jsonString) {
+  // Remove trailing commas
+  var fixedJSON = jsonString.replace(/,\s*([}\]])/g, "$1");
+  return fixedJSON;
+}
+
 textArea.addEventListener("keyup", function () {
-  if (!isJSONvalid(this.value)) {
+  var correctedValue = autoFixJSON(this.value);
+
+  if (!isJSONvalid(correctedValue)) {
     this.setAttribute("class", "invalid");
   } else {
-    this.setAttribute("class", "");
+    this.removeAttribute("class");
+    this.value = correctedValue;
   }
 });
 
@@ -116,5 +124,16 @@ window.onload = function () {
 
   Array.from(document.querySelectorAll('[type="checkbox"][data-qp]')).forEach(function (el) {
     setCheckedStatus(el);
+  });
+
+  window.didomiOnReady = window.didomiOnReady || [];
+  window.didomiOnReady.push(function () {
+    if (window.Didomi && window.Didomi.getConfig().regulation.name === "none") {
+      var banner = document.createElement("div");
+      banner.setAttribute("id", "no-regulation-banner");
+      banner.textContent = "No applicable regulation found (none)";
+      document.body.insertBefore(banner, document.body.firstChild);
+      banner.classList.add("visible");
+    }
   });
 };
