@@ -54,6 +54,11 @@
             <span>Notice ID</span>
           </div>
 
+          <div class="input_text_wrapper">
+            <input type="text" id="commit_hash" data-qp="commit_hash" required />
+            <span>Commit Hash</span>
+          </div>
+
           <div class="input_wrapper">
             <div class="input_text_wrapper">
               <input type="text" id="userCountry" data-qp="country" required />
@@ -76,6 +81,16 @@
           </label>
           <div class="toggle_value_container">
             <span>GDPR applies globally</span>
+          </div>
+        </div>
+
+        <div class="toggle_container">
+          <label class="switch">
+            <input name="static" data-qp="static" type="checkbox" />
+            <span class="slider round"></span>
+          </label>
+          <div class="toggle_value_container">
+            <span>Use Loader Static</span>
           </div>
         </div>
 
