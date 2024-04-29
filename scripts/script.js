@@ -70,10 +70,12 @@ function makeNotice() {
   var noticeid = new URL(document.location.href).searchParams.get("notice_id");
   var userCountry = new URL(document.location.href).searchParams.get("country");
   var userRegion = new URL(document.location.href).searchParams.get("region");
+  var commitHash = new URL(document.location.href).searchParams.get("commit_hash");
   var global = parseInt(new URL(document.location.href).searchParams.get("global")) ? true : false;
   var staging = parseInt(new URL(document.location.href).searchParams.get("staging")) ? true : false;
+  var staticLoader = parseInt(new URL(document.location.href).searchParams.get("static")) ? true : false;
 
-  writeSDK(apikey, noticeid, userCountry, userRegion, global, staging);
+  writeSDK(apikey, noticeid, userCountry, userRegion, global, staging, commitHash, staticLoader);
 }
 
 /* Custom JSON */

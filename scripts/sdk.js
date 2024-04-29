@@ -1,4 +1,4 @@
-function writeSDK(apikey, noticeid, userCountry, userRegion, global, staging) {
+function writeSDK(apikey, noticeid, userCountry, userRegion, global, staging, commitHash, staticLoader) {
   var _staging = staging ? "staging." : "";
   window.gdprAppliesGlobally = global;
   (function () {
@@ -110,6 +110,9 @@ function writeSDK(apikey, noticeid, userCountry, userRegion, global, staging) {
             o = o + "&region=" + d;
           }
         }
+      }
+      if (staticLoader && commitHash) {
+        o = "https://sdk." + _staging + "privacy-center.org/" + commitHash + "/loader-static." + commitHash + ".js?target_type=notice&target=" + t;
       }
       r.href = "https://sdk." + _staging + "privacy-center.org/";
       n.href = "https://sdk." + _staging + "privacy-center.org/";
