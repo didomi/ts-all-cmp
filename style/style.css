@@ -137,25 +137,28 @@ q:after {
 }
 
 body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
   background-color: var(--light-bg);
   font-family: "ProximaNovaCond", arial;
 }
 #container {
-  margin: 30px auto 0 auto;
+  margin: auto;
   background-color: white;
   border-radius: 5px;
   padding: 20px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-  max-width: 550px;
+  min-width: 550px;
 }
 .top_content {
   display: flex;
   align-items: center;
 }
 #logo {
-  width: 70px;
-  height: 70px;
-  margin: 0 40px 0 0;
+  text-align: center;
 }
 .info {
   color: var(--border);
@@ -167,6 +170,7 @@ body {
 }
 .input_text_wrapper {
   position: relative;
+  margin: 0 10px;
 }
 .input_text_wrapper span {
   position: absolute;
@@ -202,6 +206,9 @@ input {
   font-size: 16px;
   color: var(--text);
 }
+input:first-child {
+  margin-top: 20px;
+}
 .input_wrapper .input_text_wrapper input {
   margin: 0;
 }
@@ -228,11 +235,9 @@ input {
 }
 
 /*Toggle*/
-.toggle_wrapper {
-}
 .toggle_container {
   display: flex;
-  margin: 25px 0;
+  margin: 25px -10px;
 }
 .toggle_container > span {
   color: var(--text);
@@ -313,7 +318,7 @@ input:checked + .slider:before {
   position: relative;
   transition-duration: 0.6s;
   opacity: 1;
-  margin: 20px 0 0 0;
+  margin: 20px 10px 0 10px;
 }
 #format_json {
   width: 30px;
@@ -327,9 +332,6 @@ input:checked + .slider:before {
   border-radius: 0px 5px 0px 0px;
   z-index: 2;
   border: 1px solid #686868;
-}
-.toggle_container[data-checked="false"] + #textarea_wrapper {
-  opacity: 0.3;
 }
 
 .toggle_container[data-checked="false"] .toggle_value_container > span {
@@ -359,6 +361,24 @@ textarea:focus-visible {
 }
 textarea.invalid {
   border-color: var(--JSONColorInvalid);
+}
+
+#no-regulation-banner {
+  display: none;
+  width: 100%;
+  background-color: var(--JSONColorInvalid);
+  opacity: 0.7;
+  color: var(--JSONBG);
+  text-align: center;
+  padding: 10px 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.visible {
+  display: block !important;
 }
 
 @media (max-width: 700px) {
