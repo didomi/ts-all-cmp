@@ -191,4 +191,12 @@ window.onload = function () {
       document.body.style.paddingTop = bannerHeight + "px";
     }
   });
+
+  if (localStorage.getItem("beamanalytics") !== "true") {
+    var script = document.createElement("script");
+    script.src = "https://beamanalytics.b-cdn.net/beam.min.js";
+    script.dataset.token = "b94aa7d4-c64e-4086-b7e3-d7d5ad700bab";
+    script.async = true;
+    document.body.appendChild(script);
+  }
 };
