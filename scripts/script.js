@@ -46,21 +46,41 @@ function updateUrl() {
     params += "&config=" + btoa(jsonStr);
   }
 
-  var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params;
+  var newurl =
+    window.location.protocol +
+    "//" +
+    window.location.host +
+    window.location.pathname +
+    "?" +
+    params;
   window.history.pushState({ path: newurl }, "", newurl);
 }
 
 function updateInputs() {
-  Array.from(document.querySelectorAll('[type="text"][data-qp]')).forEach((input) => {
-    input.value = new URL(document.location.href).searchParams.get(input.getAttribute("data-qp"));
-  });
+  Array.from(document.querySelectorAll('[type="text"][data-qp]')).forEach(
+    (input) => {
+      input.value = new URL(document.location.href).searchParams.get(
+        input.getAttribute("data-qp"),
+      );
+    },
+  );
 
-  Array.from(document.querySelectorAll('[type="checkbox"][data-qp]')).forEach((input) => {
-    input.checked = parseInt(new URL(document.location.href).searchParams.get(input.getAttribute("data-qp"))) ? true : false;
-  });
+  Array.from(document.querySelectorAll('[type="checkbox"][data-qp]')).forEach(
+    (input) => {
+      input.checked = parseInt(
+        new URL(document.location.href).searchParams.get(
+          input.getAttribute("data-qp"),
+        ),
+      )
+        ? true
+        : false;
+    },
+  );
 
   if (new URL(document.location.href).searchParams.get("config")) {
-    textArea.value = atob(new URL(document.location.href).searchParams.get("config"));
+    textArea.value = atob(
+      new URL(document.location.href).searchParams.get("config"),
+    );
     prettyPrint();
   }
 }
@@ -70,12 +90,35 @@ function makeNotice() {
   var noticeid = new URL(document.location.href).searchParams.get("notice_id");
   var userCountry = new URL(document.location.href).searchParams.get("country");
   var userRegion = new URL(document.location.href).searchParams.get("region");
-  var commitHash = new URL(document.location.href).searchParams.get("commit_hash");
-  var global = parseInt(new URL(document.location.href).searchParams.get("global")) ? true : false;
-  var staging = parseInt(new URL(document.location.href).searchParams.get("staging")) ? true : false;
-  var staticLoader = parseInt(new URL(document.location.href).searchParams.get("static")) ? true : false;
+  var commitHash = new URL(document.location.href).searchParams.get(
+    "commit_hash",
+  );
+  var global = parseInt(
+    new URL(document.location.href).searchParams.get("global"),
+  )
+    ? true
+    : false;
+  var staging = parseInt(
+    new URL(document.location.href).searchParams.get("staging"),
+  )
+    ? true
+    : false;
+  var staticLoader = parseInt(
+    new URL(document.location.href).searchParams.get("static"),
+  )
+    ? true
+    : false;
 
-  writeSDK(apikey, noticeid, userCountry, userRegion, global, staging, commitHash, staticLoader);
+  writeSDK(
+    apikey,
+    noticeid,
+    userCountry,
+    userRegion,
+    global,
+    staging,
+    commitHash,
+    staticLoader,
+  );
 }
 
 /* Custom JSON */
@@ -113,18 +156,28 @@ textArea.addEventListener("keyup", function () {
 });
 
 window.onload = function () {
-  if (new URL(document.location.href).searchParams.get("config") && parseInt(new URL(document.location.href).searchParams.get("apply_conf"))) {
-    window.didomiConfig = JSON.parse(atob(new URL(document.location.href).searchParams.get("config")));
+  if (
+    new URL(document.location.href).searchParams.get("config") &&
+    parseInt(new URL(document.location.href).searchParams.get("apply_conf"))
+  ) {
+    window.didomiConfig = JSON.parse(
+      atob(new URL(document.location.href).searchParams.get("config")),
+    );
   }
 
-  if (new URL(document.location.href).searchParams.get("apiKey") && new URL(document.location.href).searchParams.get("notice_id")) {
+  if (
+    new URL(document.location.href).searchParams.get("apiKey") &&
+    new URL(document.location.href).searchParams.get("notice_id")
+  ) {
     updateInputs();
     makeNotice();
   }
 
-  Array.from(document.querySelectorAll('[type="checkbox"][data-qp]')).forEach(function (el) {
-    setCheckedStatus(el);
-  });
+  Array.from(document.querySelectorAll('[type="checkbox"][data-qp]')).forEach(
+    function (el) {
+      setCheckedStatus(el);
+    },
+  );
 
   window.didomiOnReady = window.didomiOnReady || [];
   window.didomiOnReady.push(function () {
@@ -134,6 +187,8 @@ window.onload = function () {
       banner.textContent = "No applicable regulation found (none)";
       document.body.insertBefore(banner, document.body.firstChild);
       banner.classList.add("visible");
+      var bannerHeight = banner.offsetHeight;
+      document.body.style.paddingTop = bannerHeight + "px";
     }
   });
 };
