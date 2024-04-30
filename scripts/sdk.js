@@ -1,4 +1,13 @@
-function writeSDK(apikey, noticeid, userCountry, userRegion, global, staging, commitHash, staticLoader) {
+function writeSDK(
+  apikey,
+  noticeid,
+  userCountry,
+  userRegion,
+  global,
+  staging,
+  commitHash,
+  staticLoader,
+) {
   var _staging = staging ? "staging." : "";
   window.gdprAppliesGlobally = global;
   (function () {
@@ -90,7 +99,13 @@ function writeSDK(apikey, noticeid, userCountry, userRegion, global, staging, co
       a.type = "text/javascript";
       a["async"] = true;
       a.charset = "utf-8";
-      var o = "https://sdk." + _staging + "privacy-center.org/" + e + "/loader.js?target_type=notice&target=" + t;
+      var o =
+        "https://sdk." +
+        _staging +
+        "privacy-center.org/" +
+        e +
+        "/loader.js?target_type=notice&target=" +
+        t;
       if (window.didomiConfig && window.didomiConfig.user) {
         var c = window.didomiConfig.user;
         var s = c.country;
@@ -112,7 +127,15 @@ function writeSDK(apikey, noticeid, userCountry, userRegion, global, staging, co
         }
       }
       if (staticLoader && commitHash) {
-        o = "https://sdk." + _staging + "privacy-center.org/" + commitHash + "/loader-static." + commitHash + ".js?target_type=notice&target=" + t;
+        o =
+          "https://sdk." +
+          _staging +
+          "privacy-center.org/" +
+          commitHash +
+          "/loader-static." +
+          commitHash +
+          ".js?target_type=notice&target=" +
+          t;
       }
       r.href = "https://sdk." + _staging + "privacy-center.org/";
       n.href = "https://sdk." + _staging + "privacy-center.org/";

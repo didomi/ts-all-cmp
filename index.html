@@ -9,7 +9,13 @@
   <body>
     <div id="container">
       <div id="logo">
-        <svg width="90" height="16" viewBox="0 0 180 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="90"
+          height="16"
+          viewBox="0 0 180 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             fill-rule="evenodd"
             clip-rule="evenodd"
@@ -55,7 +61,12 @@
           </div>
 
           <div class="input_text_wrapper">
-            <input type="text" id="commit_hash" data-qp="commit_hash" required />
+            <input
+              type="text"
+              id="commit_hash"
+              data-qp="commit_hash"
+              required
+            />
             <span>Commit hash</span>
           </div>
 
@@ -114,13 +125,26 @@
           </div>
         </div>
         <div id="textarea_wrapper">
-          <textarea data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" spellcheck="false"></textarea>
+          <textarea
+            data-gramm="false"
+            data-gramm_editor="false"
+            data-enable-grammarly="false"
+            spellcheck="false"
+          ></textarea>
         </div>
       </div>
 
       <div id="controls">
-        <div onclick="javascript:Didomi ? Didomi.notice.show() : console.log('Didomi is not there')">Show notice</div>
-        <div onclick="javascript:Didomi ? (() => { Didomi.reset(); location.reload(); })() : console.log('Didomi is not there')">Reset status</div>
+        <div
+          onclick="javascript:Didomi ? Didomi.notice.show() : console.log('Didomi is not there')"
+        >
+          Show notice
+        </div>
+        <div
+          onclick="javascript:Didomi ? (() => { Didomi.reset(); location.reload(); })() : console.log('Didomi is not there')"
+        >
+          Reset status
+        </div>
       </div>
     </div>
 

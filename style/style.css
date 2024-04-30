@@ -134,6 +134,7 @@ q:after {
   --JSONBG: #202124;
   --JSONColor: #37d0c3;
   --JSONColorInvalid: #e06c6e;
+  --banner-color: #e89192;
 }
 
 body {
@@ -369,8 +370,7 @@ textarea.invalid {
 #no-regulation-banner {
   display: none;
   width: 100%;
-  background-color: var(--JSONColorInvalid);
-  opacity: 0.7;
+  background-color: var(--banner-color);
   color: var(--JSONBG);
   text-align: center;
   padding: 10px 0;
