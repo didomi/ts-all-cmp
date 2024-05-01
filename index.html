@@ -136,12 +136,12 @@
 
       <div id="controls">
         <div
-          onclick="javascript:Didomi ? Didomi.notice.show() : console.log('Didomi is not there')"
+          onclick="if (typeof window.Didomi !== 'undefined') Didomi.notice.show(); else console.log('Didomi is not defined. Try reloading with a valid API key and notice ID.');"
         >
           Show notice
         </div>
         <div
-          onclick="javascript:Didomi ? (() => { Didomi.reset(); location.reload(); })() : console.log('Didomi is not there')"
+          onclick="if (typeof window.Didomi !== 'undefined') { Didomi.reset(); location.reload(); } else console.log('Didomi is not defined. Try reloading with a valid API key and notice ID.');"
         >
           Reset status
         </div>

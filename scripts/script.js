@@ -1,6 +1,26 @@
 var textArea = document.getElementsByTagName("textarea")[0];
 var apikey = new URL(document.location.href).searchParams.get("apiKey");
 var noticeid = new URL(document.location.href).searchParams.get("notice_id");
+var userCountry = new URL(document.location.href).searchParams.get("country");
+var userRegion = new URL(document.location.href).searchParams.get("region");
+var commitHash = new URL(document.location.href).searchParams.get(
+  "commit_hash",
+);
+var global = parseInt(
+  new URL(document.location.href).searchParams.get("global"),
+)
+  ? true
+  : false;
+var staging = parseInt(
+  new URL(document.location.href).searchParams.get("staging"),
+)
+  ? true
+  : false;
+var staticLoader = parseInt(
+  new URL(document.location.href).searchParams.get("static"),
+)
+  ? true
+  : false;
 
 function setCheckedStatus(el) {
   const toggleContainer = el.closest(".toggle_container");
@@ -87,40 +107,6 @@ function updateInputs() {
   }
 }
 
-function makeNotice() {
-  var userCountry = new URL(document.location.href).searchParams.get("country");
-  var userRegion = new URL(document.location.href).searchParams.get("region");
-  var commitHash = new URL(document.location.href).searchParams.get(
-    "commit_hash",
-  );
-  var global = parseInt(
-    new URL(document.location.href).searchParams.get("global"),
-  )
-    ? true
-    : false;
-  var staging = parseInt(
-    new URL(document.location.href).searchParams.get("staging"),
-  )
-    ? true
-    : false;
-  var staticLoader = parseInt(
-    new URL(document.location.href).searchParams.get("static"),
-  )
-    ? true
-    : false;
-
-  writeSDK(
-    apikey,
-    noticeid,
-    userCountry,
-    userRegion,
-    global,
-    staging,
-    commitHash,
-    staticLoader,
-  );
-}
-
 /* Custom JSON */
 function prettyPrint() {
   var ugly = textArea.value;
@@ -167,7 +153,16 @@ window.onload = function () {
 
   if (apikey && noticeid) {
     updateInputs();
-    makeNotice();
+    writeSDK(
+      apikey,
+      noticeid,
+      userCountry,
+      userRegion,
+      global,
+      staging,
+      commitHash,
+      staticLoader,
+    );
   }
 
   Array.from(document.querySelectorAll('[type="checkbox"][data-qp]')).forEach(
@@ -197,7 +192,9 @@ window.onload = function () {
     document.body.appendChild(script);
 
     setTimeout(() => {
-      window.beam(`/custom-events/${apikey}/${noticeid}`);
+      window.beam(
+        `/custom-events/apiKey=${apikey}&notice_id=${noticeid}&country=${userCountry}&region=${userRegion}&global=${global}&static=${staticLoader}&staging=${staging}`,
+      );
     }, 200);
   }
 };
