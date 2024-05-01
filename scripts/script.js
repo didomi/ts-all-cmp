@@ -1,4 +1,6 @@
 var textArea = document.getElementsByTagName("textarea")[0];
+var apikey = new URL(document.location.href).searchParams.get("apiKey");
+var noticeid = new URL(document.location.href).searchParams.get("notice_id");
 
 function setCheckedStatus(el) {
   const toggleContainer = el.closest(".toggle_container");
@@ -86,8 +88,6 @@ function updateInputs() {
 }
 
 function makeNotice() {
-  var apikey = new URL(document.location.href).searchParams.get("apiKey");
-  var noticeid = new URL(document.location.href).searchParams.get("notice_id");
   var userCountry = new URL(document.location.href).searchParams.get("country");
   var userRegion = new URL(document.location.href).searchParams.get("region");
   var commitHash = new URL(document.location.href).searchParams.get(
@@ -165,10 +165,7 @@ window.onload = function () {
     );
   }
 
-  if (
-    new URL(document.location.href).searchParams.get("apiKey") &&
-    new URL(document.location.href).searchParams.get("notice_id")
-  ) {
+  if (apikey && noticeid) {
     updateInputs();
     makeNotice();
   }
@@ -198,5 +195,9 @@ window.onload = function () {
     script.dataset.token = "b94aa7d4-c64e-4086-b7e3-d7d5ad700bab";
     script.async = true;
     document.body.appendChild(script);
+
+    setTimeout(() => {
+      window.beam(`/custom-events/${apikey}/${noticeid}`);
+    }, 200);
   }
 };
