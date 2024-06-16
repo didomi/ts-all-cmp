@@ -124,20 +124,11 @@ function isJSONvalid(text) {
   return true;
 }
 
-function autoFixJSON(jsonString) {
-  // Remove trailing commas
-  var fixedJSON = jsonString.replace(/,\s*([}\]])/g, "$1");
-  return fixedJSON;
-}
-
 textArea.addEventListener("keyup", function () {
-  var correctedValue = autoFixJSON(this.value);
-
-  if (!isJSONvalid(correctedValue)) {
-    this.setAttribute("class", "invalid");
+  if (isJSONvalid(this.value)) {
+    this.classList.remove("invalid");
   } else {
-    this.removeAttribute("class");
-    this.value = correctedValue;
+    this.classList.add("invalid");
   }
 });
 

@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prettier": "prettier --write ."
   },
-  "author": "",
+  "authors": "David Tessier and Pierre Vanoverschelde",
   "license": "ISC",
   "dependencies": {
-    "prettier": "^3.1.0"
+    "prettier": "^3.3.2"
   }
 }
