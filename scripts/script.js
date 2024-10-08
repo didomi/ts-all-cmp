@@ -21,6 +21,11 @@ var staticLoader = parseInt(
 )
   ? true
   : false;
+var gppStub = parseInt(
+  new URL(document.location.href).searchParams.get("gpp_stub"),
+)
+  ? true
+  : false;
 
 function setCheckedStatus(el) {
   const toggleContainer = el.closest(".toggle_container");
@@ -153,6 +158,7 @@ window.onload = function () {
       staging,
       commitHash,
       staticLoader,
+      gppStub,
     );
   }
 
