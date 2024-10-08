@@ -1,3 +1,12 @@
+function loadGPPStub(condition, scriptUrl) {
+  if (condition) {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = scriptUrl;
+    document.head.appendChild(script);
+  }
+}
+
 function writeSDK(
   apikey,
   noticeid,
@@ -7,7 +16,9 @@ function writeSDK(
   staging,
   commitHash,
   staticLoader,
+  gppStub,
 ) {
+  loadGPPStub(gppStub, "scripts/gpp_stub.js");
   var _staging = staging ? "staging." : "";
   window.gdprAppliesGlobally = global;
   (function () {
