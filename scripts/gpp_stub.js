@@ -1,3 +1,4 @@
+// Retrieved from https://github.com/IABTechLab/iabgpp-es/blob/3.1.4/modules/stub/src/stub.js
 window.__gpp_addFrame = function (n) {
   if (!window.frames[n]) {
     if (document.body) {
