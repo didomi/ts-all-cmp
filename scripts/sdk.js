@@ -17,9 +17,15 @@ function writeSDK(
   commitHash,
   staticLoader,
   gppStub,
+  preprod
 ) {
   loadGPPStub(gppStub, "scripts/gpp_stub.js");
+  var _base = "https://sdk.";
   var _staging = staging ? "staging." : "";
+  if (preprod) {
+    _base = "https://sdk";
+    _staging = "-preprod."
+  }
   window.gdprAppliesGlobally = global;
   (function () {
     function n(e) {
@@ -111,7 +117,7 @@ function writeSDK(
       a["async"] = true;
       a.charset = "utf-8";
       var o =
-        "https://sdk." +
+        _base +
         _staging +
         "privacy-center.org/" +
         e +
@@ -139,7 +145,7 @@ function writeSDK(
       }
       if (staticLoader && commitHash) {
         o =
-          "https://sdk." +
+          _base +
           _staging +
           "privacy-center.org/" +
           commitHash +
@@ -148,8 +154,8 @@ function writeSDK(
           ".js?target_type=notice&target=" +
           t;
       }
-      r.href = "https://sdk." + _staging + "privacy-center.org/";
-      n.href = "https://sdk." + _staging + "privacy-center.org/";
+      r.href = _base + _staging + "privacy-center.org/";
+      n.href = _base + _staging + "privacy-center.org/";
       i.href = o;
       a.src = o;
       var f = document.getElementsByTagName("script")[0];
