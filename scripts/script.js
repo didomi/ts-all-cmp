@@ -17,10 +17,10 @@ var staging = parseInt(
   ? true
   : false;
 var preprod = parseInt(
-    new URL(document.location.href).searchParams.get("preprod"),
+  new URL(document.location.href).searchParams.get("preprod"),
 )
-    ? true
-    : false;
+  ? true
+  : false;
 var staticLoader = parseInt(
   new URL(document.location.href).searchParams.get("static"),
 )
@@ -164,7 +164,7 @@ window.onload = function () {
       commitHash,
       staticLoader,
       gppStub,
-        preprod
+      preprod,
     );
   }
 

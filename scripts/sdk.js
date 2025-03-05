@@ -17,14 +17,14 @@ function writeSDK(
   commitHash,
   staticLoader,
   gppStub,
-  preprod
+  preprod,
 ) {
   loadGPPStub(gppStub, "scripts/gpp_stub.js");
   var _base = "https://sdk.";
   var _staging = staging ? "staging." : "";
   if (preprod) {
     _base = "https://sdk";
-    _staging = "-preprod."
+    _staging = "-preprod.";
   }
   window.gdprAppliesGlobally = global;
   (function () {
