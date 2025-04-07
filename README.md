@@ -28,5 +28,5 @@ The website https://didomi.github.io/ts-all-cmp enables you to test, share, and 
 ## 📦 Example
 
 ```
-https://didomi.github.io/ts-all-cmp?apiKey=abc123&notice_id=xyz456&apply_conf=1&config=...
+https://didomi.github.io/ts-all-cmp/?apiKey=7dd8ec4e-746c-455e-a610-99121b4148df&notice_id=yZRMpq7b
 ```
