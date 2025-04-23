@@ -6,11 +6,6 @@ var userRegion = new URL(document.location.href).searchParams.get("region");
 var commitHash = new URL(document.location.href).searchParams.get(
   "commit_hash",
 );
-var global = parseInt(
-  new URL(document.location.href).searchParams.get("global"),
-)
-  ? true
-  : false;
 var staging = parseInt(
   new URL(document.location.href).searchParams.get("staging"),
 )
@@ -28,6 +23,11 @@ var staticLoader = parseInt(
   : false;
 var gppStub = parseInt(
   new URL(document.location.href).searchParams.get("gpp_stub"),
+)
+  ? true
+  : false;
+var ctvPlatform = parseInt(
+  new URL(document.location.href).searchParams.get("ctv_platform"),
 )
   ? true
   : false;
@@ -134,6 +134,12 @@ function isJSONvalid(text) {
   return true;
 }
 
+function disableCTV() {
+  var url = new URL(window.location.href);
+  url.searchParams.set("ctv_platform", "0");
+  window.location.href = url.toString();
+}
+
 textArea.addEventListener("keyup", function () {
   if (isJSONvalid(this.value)) {
     this.classList.remove("invalid");
@@ -150,6 +156,23 @@ window.onload = function () {
     window.didomiConfig = JSON.parse(
       atob(new URL(document.location.href).searchParams.get("config")),
     );
+
+    // If both user country and region are specified, and not already set in `didomiConfig`, they will be added accordingly
+    if (userCountry && !window.didomiConfig?.user?.country) {
+      window.didomiConfig.user = window.didomiConfig.user || {};
+      window.didomiConfig.user.country = userCountry;
+
+      if (userRegion && !window.didomiConfig.user.region) {
+        window.didomiConfig.user.region = userRegion;
+      }
+    }
+  }
+
+  if (apikey && noticeid && ctvPlatform) {
+    // Force enabling Didomi notice
+    window.didomiConfig = window.didomiConfig || {};
+    window.didomiConfig.notice = window.didomiConfig.notice || {};
+    window.didomiConfig.notice.enable = true;
   }
 
   if (apikey && noticeid) {
@@ -159,11 +182,11 @@ window.onload = function () {
       noticeid,
       userCountry,
       userRegion,
-      global,
       staging,
       commitHash,
       staticLoader,
       gppStub,
+      ctvPlatform,
       preprod,
     );
   }
@@ -176,7 +199,12 @@ window.onload = function () {
 
   window.didomiOnReady = window.didomiOnReady || [];
   window.didomiOnReady.push(function () {
-    if (window.Didomi && window.Didomi.getConfig().regulation.name === "none") {
+    if (
+      window.Didomi &&
+      window.Didomi.getConfig() &&
+      window.Didomi.getConfig().regulation &&
+      window.Didomi.getConfig().regulation.name === "none"
+    ) {
       var banner = document.createElement("div");
       banner.setAttribute("id", "no-regulation-banner");
       banner.textContent = "No applicable regulation found (none)";
@@ -184,6 +212,19 @@ window.onload = function () {
       banner.classList.add("visible");
       var bannerHeight = banner.offsetHeight;
       document.body.style.paddingTop = bannerHeight + "px";
+    }
+
+    if (apikey && noticeid && ctvPlatform) {
+      // Display the toast notification
+      var toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerHTML = `CTV is enabled${window.Didomi && window.Didomi.notice && !window.Didomi.notice.isVisible() ? " and not visible" : ""}.<button onclick="disableCTV()">Click here to disable</button>`;
+      document.body.appendChild(toast);
+
+      var toastStyle = document.createElement("link");
+      toastStyle.rel = "stylesheet";
+      toastStyle.href = "style/toast.css";
+      document.head.appendChild(toastStyle);
     }
   });
 };

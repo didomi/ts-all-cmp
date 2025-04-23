@@ -106,7 +106,7 @@ section {
   display: block;
 }
 
-* {
+#container * {
   box-sizing: border-box;
 }
 body {
