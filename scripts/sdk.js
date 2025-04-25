@@ -1,6 +1,6 @@
 function loadGPPStub(condition, scriptUrl) {
   if (condition) {
-    var script = document.createElement("script");
+    const script = document.createElement("script");
     script.type = "text/javascript";
     script.src = scriptUrl;
     document.head.appendChild(script);
@@ -20,13 +20,9 @@ function writeSDK(
   preprod,
 ) {
   loadGPPStub(gppStub, "scripts/gpp_stub.js");
-  var _base = "https://sdk.";
-  var _staging = staging ? "staging." : "";
-  if (preprod) {
-    _base = "https://sdk";
-    _staging = "-preprod.";
-  }
-  var _ctvPlatform = ctvPlatform ? "platform=ctv&" : "";
+  const _base = preprod ? "https://sdk" : "https://sdk.";
+  const _staging = preprod ? "-preprod." : staging ? "staging." : "";
+  const _ctvPlatform = ctvPlatform ? "platform=ctv&" : "";
   (function () {
     function n(e) {
       if (!window.frames[e]) {

@@ -134,7 +134,7 @@ q:after {
   --JSONBG: #202124;
   --JSONColor: #37d0c3;
   --JSONColorInvalid: #e06c6e;
-  --banner-color: #e89192;
+  --top-banner: #265973;
 }
 
 body {
@@ -367,21 +367,44 @@ textarea.invalid {
   border-color: var(--JSONColorInvalid);
 }
 
-#no-regulation-banner {
+#top-banner {
   display: none;
   width: 100%;
-  background-color: var(--banner-color);
-  color: var(--JSONBG);
+  background-color: var(--top-banner);
+  color: #fff;
   text-align: center;
   padding: 10px 0;
   position: absolute;
   top: 0;
   left: 0;
   z-index: 1000;
+  line-height: 1.5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .visible {
   display: block !important;
+}
+
+#top-banner.ctv-enabled {
+  background-color: var(--top-banner);
+  color: #fff;
+}
+
+.banner-ctv-button {
+  margin-left: 12px;
+  padding: 6px 12px;
+  background-color: #fff;
+  color: var(--top-banner);
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.banner-ctv-button:hover {
+  background-color: #e6e6e6;
 }
 
 @media (max-width: 700px) {
