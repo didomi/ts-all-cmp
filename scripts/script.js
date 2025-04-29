@@ -1,36 +1,18 @@
-var textArea = document.getElementsByTagName("textarea")[0];
-var apikey = new URL(document.location.href).searchParams.get("apiKey");
-var noticeid = new URL(document.location.href).searchParams.get("notice_id");
-var userCountry = new URL(document.location.href).searchParams.get("country");
-var userRegion = new URL(document.location.href).searchParams.get("region");
-var commitHash = new URL(document.location.href).searchParams.get(
-  "commit_hash",
-);
-var global = parseInt(
-  new URL(document.location.href).searchParams.get("global"),
-)
-  ? true
-  : false;
-var staging = parseInt(
-  new URL(document.location.href).searchParams.get("staging"),
-)
-  ? true
-  : false;
-var preprod = parseInt(
-  new URL(document.location.href).searchParams.get("preprod"),
-)
-  ? true
-  : false;
-var staticLoader = parseInt(
-  new URL(document.location.href).searchParams.get("static"),
-)
-  ? true
-  : false;
-var gppStub = parseInt(
-  new URL(document.location.href).searchParams.get("gpp_stub"),
-)
-  ? true
-  : false;
+const params = new URL(document.location.href).searchParams;
+const textArea = document.getElementsByTagName("textarea")[0];
+
+const apikey = params.get("apiKey");
+const noticeid = params.get("notice_id");
+const userCountry = params.get("country");
+const userRegion = params.get("region");
+const commitHash = params.get("commit_hash");
+const config = params.get("config");
+
+const staging = Boolean(parseInt(params.get("staging")));
+const preprod = Boolean(parseInt(params.get("preprod")));
+const staticLoader = Boolean(parseInt(params.get("static")));
+const gppStub = Boolean(parseInt(params.get("gpp_stub")));
+const ctvPlatform = Boolean(parseInt(params.get("ctv_platform")));
 
 function setCheckedStatus(el) {
   const toggleContainer = el.closest(".toggle_container");
@@ -58,7 +40,7 @@ textArea.addEventListener("keyup", () => {
 });
 
 function updateUrl() {
-  var params = Array.from(document.querySelectorAll('[type="text"][data-qp]'))
+  let params = Array.from(document.querySelectorAll('[type="text"][data-qp]'))
     .map((el) => {
       return el.getAttribute("data-qp") + "=" + el.value;
     })
@@ -73,12 +55,12 @@ function updateUrl() {
       .join("&");
 
   if (isJSONvalid(textArea.value)) {
-    var jsonStr = textArea.value;
+    let jsonStr = textArea.value;
     jsonStr = jsonStr.replace(/\s\s+/g, " ");
     params += "&config=" + btoa(jsonStr);
   }
 
-  var newurl =
+  const newurl =
     window.location.protocol +
     "//" +
     window.location.host +
@@ -86,6 +68,15 @@ function updateUrl() {
     "?" +
     params;
   window.history.pushState({ path: newurl }, "", newurl);
+}
+
+function isValidBase64(str) {
+  if (typeof str !== "string") return false;
+
+  if (str.length % 4 !== 0) return false;
+
+  const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/;
+  return base64Regex.test(str);
 }
 
 function updateInputs() {
@@ -109,19 +100,17 @@ function updateInputs() {
     },
   );
 
-  if (new URL(document.location.href).searchParams.get("config")) {
-    textArea.value = atob(
-      new URL(document.location.href).searchParams.get("config"),
-    );
+  if (config && isValidBase64(config)) {
+    textArea.value = atob(config);
     prettyPrint();
   }
 }
 
 /* Custom JSON */
 function prettyPrint() {
-  var ugly = textArea.value;
-  var obj = JSON.parse(ugly);
-  var pretty = JSON.stringify(obj, undefined, 2);
+  const ugly = textArea.value;
+  const obj = JSON.parse(ugly);
+  const pretty = JSON.stringify(obj, undefined, 2);
   textArea.value = pretty;
 }
 
@@ -134,6 +123,12 @@ function isJSONvalid(text) {
   return true;
 }
 
+function disableCTV() {
+  const url = new URL(window.location.href);
+  url.searchParams.set("ctv_platform", "0");
+  window.location.href = url.toString();
+}
+
 textArea.addEventListener("keyup", function () {
   if (isJSONvalid(this.value)) {
     this.classList.remove("invalid");
@@ -143,13 +138,40 @@ textArea.addEventListener("keyup", function () {
 });
 
 window.onload = function () {
+  if (config && parseInt(params.get("apply_conf")) && isValidBase64(config)) {
+    window.didomiConfig = JSON.parse(atob(config));
+
+    // If both user country and region are specified, and not already set in `didomiConfig`, they will be added accordingly
+    if (userCountry && !window.didomiConfig?.user?.country) {
+      window.didomiConfig.user = window.didomiConfig.user || {};
+      window.didomiConfig.user.country = userCountry;
+
+      if (userRegion && !window.didomiConfig.user.region) {
+        window.didomiConfig.user.region = userRegion;
+      }
+    }
+  }
+
+  // If staticLoader is enabled, and apiKey / noticeId are not already set, add them inside app
   if (
-    new URL(document.location.href).searchParams.get("config") &&
-    parseInt(new URL(document.location.href).searchParams.get("apply_conf"))
+    staticLoader &&
+    apikey &&
+    !window.didomiConfig?.app?.apiKey &&
+    noticeid &&
+    !window.didomiConfig?.app?.noticeId
   ) {
-    window.didomiConfig = JSON.parse(
-      atob(new URL(document.location.href).searchParams.get("config")),
-    );
+    window.didomiConfig = window.didomiConfig || {};
+    window.didomiConfig.app = {
+      apiKey: apikey,
+      noticeId: noticeid,
+    };
+  }
+
+  // Force enabling Didomi notice
+  if (apikey && noticeid && ctvPlatform) {
+    window.didomiConfig = window.didomiConfig || {};
+    window.didomiConfig.notice = window.didomiConfig.notice || {};
+    window.didomiConfig.notice.enable = true;
   }
 
   if (apikey && noticeid) {
@@ -159,11 +181,11 @@ window.onload = function () {
       noticeid,
       userCountry,
       userRegion,
-      global,
       staging,
       commitHash,
       staticLoader,
       gppStub,
+      ctvPlatform,
       preprod,
     );
   }
@@ -174,16 +196,5 @@ window.onload = function () {
     },
   );
 
-  window.didomiOnReady = window.didomiOnReady || [];
-  window.didomiOnReady.push(function () {
-    if (window.Didomi && window.Didomi.getConfig().regulation.name === "none") {
-      var banner = document.createElement("div");
-      banner.setAttribute("id", "no-regulation-banner");
-      banner.textContent = "No applicable regulation found (none)";
-      document.body.insertBefore(banner, document.body.firstChild);
-      banner.classList.add("visible");
-      var bannerHeight = banner.offsetHeight;
-      document.body.style.paddingTop = bannerHeight + "px";
-    }
-  });
+  setupTopBanner(apikey, noticeid, ctvPlatform);
 };
