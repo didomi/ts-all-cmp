@@ -1,7 +1,7 @@
-const BASE_URL = "http://localhost:3000";
+require("dotenv").config();
 
 function buildTestUrl(params = {}) {
-  return `${BASE_URL}/?${new URLSearchParams({ ...params }).toString()}`;
+  return `${process.env.BASE_URL}/?${new URLSearchParams({ ...params }).toString()}`;
 }
 
 module.exports = { buildTestUrl };
