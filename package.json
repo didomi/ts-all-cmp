@@ -10,6 +10,10 @@
   "authors": "David Tessier and Pierre Vanoverschelde",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.5.0",
     "prettier": "^3.5.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
   }
 }

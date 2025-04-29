@@ -70,6 +70,15 @@ function updateUrl() {
   window.history.pushState({ path: newurl }, "", newurl);
 }
 
+function isValidBase64(str) {
+  if (typeof str !== "string") return false;
+
+  if (str.length % 4 !== 0) return false;
+
+  const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/;
+  return base64Regex.test(str);
+}
+
 function updateInputs() {
   Array.from(document.querySelectorAll('[type="text"][data-qp]')).forEach(
     (input) => {
@@ -91,7 +100,7 @@ function updateInputs() {
     },
   );
 
-  if (config) {
+  if (config && isValidBase64(config)) {
     textArea.value = atob(config);
     prettyPrint();
   }
@@ -129,7 +138,7 @@ textArea.addEventListener("keyup", function () {
 });
 
 window.onload = function () {
-  if (config && parseInt(params.get("apply_conf"))) {
+  if (config && parseInt(params.get("apply_conf")) && isValidBase64(config)) {
     window.didomiConfig = JSON.parse(atob(config));
 
     // If both user country and region are specified, and not already set in `didomiConfig`, they will be added accordingly
@@ -143,8 +152,23 @@ window.onload = function () {
     }
   }
 
+  // If staticLoader is enabled, and apiKey / noticeId are not already set, add them inside app
+  if (
+    staticLoader &&
+    apikey &&
+    !window.didomiConfig?.app?.apiKey &&
+    noticeid &&
+    !window.didomiConfig?.app?.noticeId
+  ) {
+    window.didomiConfig = window.didomiConfig || {};
+    window.didomiConfig.app = {
+      apiKey: apikey,
+      noticeId: noticeid,
+    };
+  }
+
+  // Force enabling Didomi notice
   if (apikey && noticeid && ctvPlatform) {
-    // Force enabling Didomi notice
     window.didomiConfig = window.didomiConfig || {};
     window.didomiConfig.notice = window.didomiConfig.notice || {};
     window.didomiConfig.notice.enable = true;
@@ -172,36 +196,5 @@ window.onload = function () {
     },
   );
 
-  window.didomiOnReady = window.didomiOnReady || [];
-  window.didomiOnReady.push(function () {
-    window.didomiOnReady = window.didomiOnReady || [];
-    window.didomiOnReady.push(function () {
-      // Create the top banner in all cases
-      const banner = document.createElement("div");
-      banner.setAttribute("id", "top-banner");
-      banner.classList.add("visible");
-
-      let bannerContent = "";
-
-      if (window.Didomi?.getConfig?.()?.regulation?.name === "none") {
-        bannerContent += "No applicable regulation found (none)";
-      }
-
-      if (apikey && noticeid && ctvPlatform) {
-        bannerContent += `${bannerContent ? " - " : ""}CTV is enabled${!window.Didomi?.notice?.isVisible?.() ? " but not visible" : ""}. 
-          <button class="banner-ctv-button" onclick="disableCTV()">Click here to disable</button>`;
-
-        banner.classList.add("ctv-enabled");
-      }
-
-      // Only insert the banner if there's something to show
-      if (bannerContent) {
-        banner.innerHTML = bannerContent;
-        document.body.insertBefore(banner, document.body.firstChild);
-
-        const bannerHeight = banner.offsetHeight;
-        document.body.style.paddingTop = bannerHeight + "px";
-      }
-    });
-  });
+  setupTopBanner(apikey, noticeid, ctvPlatform);
 };
