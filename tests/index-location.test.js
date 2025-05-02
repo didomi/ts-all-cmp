@@ -139,4 +139,24 @@ test.describe("Notice with location visibility", () => {
       hasNoticeId: true,
     });
   });
+
+  test("notice should be visible when there is another user key but the notice id is valid", async ({
+    page,
+  }) => {
+    const url = buildTestUrl({
+      apiKey: API_KEY,
+      notice_id: NOTICE_ID_CA,
+      country: "CA",
+      apply_conf: "1",
+      config: btoa(
+        JSON.stringify({
+          user: { organizationUserId: "organizationUserId" },
+        }),
+      ),
+    });
+    await runDidomiTest(page, url, true, {
+      hasApiKey: true,
+      hasNoticeId: true,
+    });
+  });
 });

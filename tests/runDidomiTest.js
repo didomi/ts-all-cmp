@@ -67,14 +67,17 @@ async function runDidomiTest(
 
     const expectedNoticeId = expectedNoticeIdFromQuery
       ? expectedNoticeIdFromQuery
-      : await page.evaluate(() => {
-          return window.didomiConfig?.app?.noticeId || null;
+      : await page.evaluate(() => window.didomiConfig?.app?.noticeId || null, {
+          timeout: TIMEOUT,
         });
 
     // Read actual notice ID from Didomi remote config
-    const actualNoticeId = await page.evaluate(() => {
-      return window.didomiRemoteConfig?.notices?.[0]?.notice_id || null;
-    });
+    const actualNoticeId = await page.evaluate(
+      () => window.didomiRemoteConfig?.notices?.[0]?.notice_id || null,
+      {
+        timeout: TIMEOUT,
+      },
+    );
 
     expect(actualNoticeId).not.toBeNull();
     expect(expectedNoticeId).not.toBeNull();
