@@ -13,8 +13,6 @@ function writeSDK(
   userCountry,
   userRegion,
   staging,
-  commitHash,
-  staticLoader,
   gppStub,
   ctvPlatform,
   preprod,
@@ -140,17 +138,6 @@ function writeSDK(
             o = o + "&region=" + d;
           }
         }
-      }
-      if (staticLoader && commitHash) {
-        o =
-          _base +
-          _staging +
-          "privacy-center.org/" +
-          commitHash +
-          "/loader-static." +
-          commitHash +
-          ".js?target_type=notice&target=" +
-          t;
       }
       r.href = _base + _staging + "privacy-center.org/";
       n.href = _base + _staging + "privacy-center.org/";

@@ -75,13 +75,14 @@ test.describe("Default settings notice visibility", () => {
     });
   });
 
-  test("notice should be visible with default config and a deprecated query parameter", async ({
+  test("notice should be visible with default config and deprecated query parameters", async ({
     page,
   }) => {
     const url = buildTestUrl({
       apiKey: API_KEY,
       notice_id: NOTICE_ID,
       global: "1",
+      static: "1",
     });
     await runDidomiTest(page, url, true, {
       hasApiKey: true,
@@ -112,16 +113,11 @@ test.describe("Default settings notice visibility", () => {
       commit_hash: "abcdef1234567890",
       staging: "0",
       preprod: "0",
-      static: "0",
       gpp_stub: "1",
       ctv_platform: "0",
       config: btoa(
         JSON.stringify({
           notice: { enable: true },
-          user: {
-            organizationUserId: "organizationUserId",
-          },
-          sync: { enabled: true },
           cookies: {
             didomiConsentStringCookieName: "consentCookie",
             iabCookieName: "iabCookie",
