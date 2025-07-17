@@ -19,7 +19,6 @@ The website https://didomi.github.io/ts-all-cmp enables you to test, share, and 
 | `commit_hash`  | Git commit hash, used for debugging or testing purposes          |
 | `staging`      | If set to `1`, loads the SDK from the staging environment        |
 | `preprod`      | If set to `1`, loads the SDK from the pre-production environment |
-| `static`       | If set to `1`, uses the static loader                            |
 | `gpp_stub`     | If set to `1`, enables the GPP stub                              |
 | `ctv_platform` | If set to `1`, loads the web based CTV SDK                       |
 | `config`       | Base64-encoded JSON used for the `didomiConfig`                  |

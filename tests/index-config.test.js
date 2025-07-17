@@ -76,14 +76,6 @@ test.describe("Notice with config visibility", () => {
             didomiConsentStringCookieName: "didomiConsentStringCookieName",
             iabCookieName: "iabCookieName",
           },
-          user: {
-            organizationUserId: "organizationUserId",
-          },
-          sync: { enabled: true },
-          app: {
-            apiKey: API_KEY,
-            noticeId: NOTICE_ID,
-          },
         }),
       ),
     });

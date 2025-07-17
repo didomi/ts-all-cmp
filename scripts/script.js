@@ -10,7 +10,6 @@ const config = params.get("config");
 
 const staging = Boolean(parseInt(params.get("staging")));
 const preprod = Boolean(parseInt(params.get("preprod")));
-const staticLoader = Boolean(parseInt(params.get("static")));
 const gppStub = Boolean(parseInt(params.get("gpp_stub")));
 const ctvPlatform = Boolean(parseInt(params.get("ctv_platform")));
 
@@ -152,18 +151,10 @@ window.onload = function () {
     }
   }
 
-  // If staticLoader is enabled, and apiKey / noticeId are not already set, add them inside app
-  if (
-    staticLoader &&
-    apikey &&
-    !window.didomiConfig?.app?.apiKey &&
-    noticeid &&
-    !window.didomiConfig?.app?.noticeId
-  ) {
+  if (commitHash && apikey && noticeid) {
     window.didomiConfig = window.didomiConfig || {};
     window.didomiConfig.app = {
-      apiKey: apikey,
-      noticeId: noticeid,
+      sdkVersion: commitHash,
     };
   }
 
@@ -182,8 +173,6 @@ window.onload = function () {
       userCountry,
       userRegion,
       staging,
-      commitHash,
-      staticLoader,
       gppStub,
       ctvPlatform,
       preprod,
