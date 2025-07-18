@@ -132,4 +132,18 @@ test.describe("Default settings notice visibility", () => {
       hasNoticeId: true,
     });
   });
+
+  test("notice should be visible and pushes gtm.js when custom container ID is set", async ({
+    page,
+  }) => {
+    const url = buildTestUrl({
+      apiKey: API_KEY,
+      notice_id: NOTICE_ID,
+      gtm_id: "GTM-W63VJKH",
+    });
+    await runDidomiTest(page, url, true, {
+      hasApiKey: true,
+      hasNoticeId: true,
+    });
+  });
 });
