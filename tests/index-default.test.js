@@ -139,11 +139,13 @@ test.describe("Default settings notice visibility", () => {
     const url = buildTestUrl({
       apiKey: API_KEY,
       notice_id: NOTICE_ID,
+      enable_gtm: "true",
       gtm_id: "GTM-W63VJKH",
     });
     await runDidomiTest(page, url, true, {
       hasApiKey: true,
       hasNoticeId: true,
+      expectGtm: true,
     });
   });
 });
