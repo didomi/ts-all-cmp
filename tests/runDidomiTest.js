@@ -16,6 +16,7 @@ async function runDidomiTest(
     commitHash = null,
     hasApiKey = false,
     hasNoticeId = false,
+    expectGtm = false,
   } = options;
 
   console.log("Test URL:", testUrl);
@@ -95,6 +96,19 @@ async function runDidomiTest(
     expect(bannerText).toContain(expectedText);
   } else {
     await expect(banner).toHaveCount(0);
+  }
+
+  const gtmLoaded = await page.evaluate(() => {
+    return (
+      Array.isArray(window.dataLayer) &&
+      window.dataLayer.some((entry) => entry.event === "gtm.js")
+    );
+  });
+
+  if (expectGtm) {
+    expect(gtmLoaded).toBe(true);
+  } else {
+    expect(gtmLoaded).toBe(false);
   }
 }
 

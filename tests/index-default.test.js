@@ -132,4 +132,36 @@ test.describe("Default settings notice visibility", () => {
       hasNoticeId: true,
     });
   });
+
+  test("notice should be visible and pushes gtm.js when enable_gtm is true", async ({
+    page,
+  }) => {
+    const url = buildTestUrl({
+      apiKey: API_KEY,
+      notice_id: NOTICE_ID,
+      enable_gtm: "true",
+      gtm_id: "GTM-W63VJKH",
+    });
+    await runDidomiTest(page, url, true, {
+      hasApiKey: true,
+      hasNoticeId: true,
+      expectGtm: true,
+    });
+  });
+
+  test("notice should be visible and does not push gtm.js when enable_gtm is false", async ({
+    page,
+  }) => {
+    const url = buildTestUrl({
+      apiKey: API_KEY,
+      notice_id: NOTICE_ID,
+      enable_gtm: "false",
+      gtm_id: "GTM-W63VJKH",
+    });
+    await runDidomiTest(page, url, true, {
+      hasApiKey: true,
+      hasNoticeId: true,
+      expectGtm: false,
+    });
+  });
 });
