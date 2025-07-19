@@ -133,13 +133,13 @@ test.describe("Default settings notice visibility", () => {
     });
   });
 
-  test("notice should be visible and pushes gtm.js when enable_gtm is true", async ({
+  test("notice should be visible and pushes gtm.js when gtm is 1", async ({
     page,
   }) => {
     const url = buildTestUrl({
       apiKey: API_KEY,
       notice_id: NOTICE_ID,
-      enable_gtm: "true",
+      gtm: "1",
       gtm_id: "GTM-W63VJKH",
     });
     await runDidomiTest(page, url, true, {
@@ -149,13 +149,13 @@ test.describe("Default settings notice visibility", () => {
     });
   });
 
-  test("notice should be visible and does not push gtm.js when enable_gtm is false", async ({
+  test("notice should be visible and does not push gtm.js when gtm is 0", async ({
     page,
   }) => {
     const url = buildTestUrl({
       apiKey: API_KEY,
       notice_id: NOTICE_ID,
-      enable_gtm: "false",
+      gtm: "0",
       gtm_id: "GTM-W63VJKH",
     });
     await runDidomiTest(page, url, true, {
