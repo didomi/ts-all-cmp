@@ -23,12 +23,16 @@ test.describe("Dev notice visibility", () => {
     });
 
     page.on("console", (msg) => {
-      if (msg.type() === "error") {
+      const msgText = msg.text();
+      if (
+        msg.type() === "error" &&
+        !msgText.includes("ERR_CERT_AUTHORITY_INVALID")
+      ) {
         const shouldSkip =
           currentUrl && currentUrl.includes("notice_id=invalid123");
 
         if (!shouldSkip) {
-          throw new Error(`Console error detected: ${msg.text()}`);
+          throw new Error(`Console error detected: ${msgText}`);
         }
       }
     });

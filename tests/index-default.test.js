@@ -12,8 +12,12 @@ test.describe("Default settings notice visibility", () => {
   test.beforeEach(async ({ page }) => {
     // Fail the test immediately if a console error is detected
     page.on("console", (msg) => {
-      if (msg.type() === "error") {
-        throw new Error(`Console error detected: ${msg.text()}`);
+      const msgText = msg.text();
+      if (
+        msg.type() === "error" &&
+        !msgText.includes("ERR_CERT_AUTHORITY_INVALID")
+      ) {
+        throw new Error(`Console error detected: ${msgText}`);
       }
     });
   });

@@ -17,6 +17,7 @@ async function runDidomiTest(
     hasApiKey = false,
     hasNoticeId = false,
     expectGtm = false,
+    configKeyPreserved = null,
   } = options;
 
   console.log("Test URL:", testUrl);
@@ -109,6 +110,18 @@ async function runDidomiTest(
     expect(gtmLoaded).toBe(true);
   } else {
     expect(gtmLoaded).toBe(false);
+  }
+
+  if (configKeyPreserved) {
+    const didomiConfig = await page.evaluate(() => window.didomiConfig);
+
+    expect(didomiConfig.app.sdkVersion).toBe(commitHash);
+    expect(didomiConfig.app.vendors).toEqual(
+      configKeyPreserved.additionalConfig.app.vendors,
+    );
+    expect(didomiConfig.integrations).toEqual(
+      configKeyPreserved.additionalConfig.integrations,
+    );
   }
 }
 

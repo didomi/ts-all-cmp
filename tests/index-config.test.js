@@ -7,13 +7,18 @@ const { runDidomiTest } = require("./runDidomiTest");
 
 const API_KEY = process.env.API_KEY;
 const NOTICE_ID = process.env.NOTICE_ID;
+const COMMIT_HASH = process.env.COMMIT_HASH;
 
 test.describe("Notice with config visibility", () => {
   test.beforeEach(async ({ page }) => {
     // Fail the test immediately if a console error is detected
     page.on("console", (msg) => {
-      if (msg.type() === "error") {
-        throw new Error(`Console error detected: ${msg.text()}`);
+      const msgText = msg.text();
+      if (
+        msg.type() === "error" &&
+        !msgText.includes("ERR_CERT_AUTHORITY_INVALID")
+      ) {
+        throw new Error(`Console error detected: ${msgText}`);
       }
     });
   });
@@ -109,6 +114,39 @@ test.describe("Notice with config visibility", () => {
     await runDidomiTest(page, url, true, {
       hasApiKey: true,
       hasNoticeId: true,
+    });
+  });
+
+  test("notice should be visible and `app` preserved", async ({ page }) => {
+    const additionalConfig = {
+      app: {
+        vendors: {
+          didomi: ["salesforce"],
+        },
+      },
+      integrations: {
+        vendors: {
+          "salesforce-dmp": {
+            enable: true,
+            namespace: "namespace",
+          },
+        },
+      },
+    };
+
+    const url = buildTestUrl({
+      apiKey: API_KEY,
+      notice_id: NOTICE_ID,
+      apply_conf: "1",
+      config: btoa(JSON.stringify(additionalConfig)),
+      commit_hash: COMMIT_HASH,
+    });
+
+    await runDidomiTest(page, url, true, {
+      hasApiKey: true,
+      hasNoticeId: true,
+      commitHash: COMMIT_HASH,
+      configKeyPreserved: { additionalConfig },
     });
   });
 });

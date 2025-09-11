@@ -153,9 +153,8 @@ window.onload = function () {
 
   if (commitHash && apikey && noticeid) {
     window.didomiConfig = window.didomiConfig || {};
-    window.didomiConfig.app = {
-      sdkVersion: commitHash,
-    };
+    window.didomiConfig.app = window.didomiConfig.app || {};
+    window.didomiConfig.app.sdkVersion = commitHash;
   }
 
   // Force enabling Didomi notice
