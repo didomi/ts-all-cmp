@@ -770,6 +770,10 @@ test("DCS reads configured browser storage and preserves signed values for copyi
     "No saved DCS",
   );
   await expect(page.locator("#copy-dcs-string")).toBeDisabled();
+  await expect(page.locator("#decode-dcs-string")).toHaveAttribute(
+    "href",
+    "https://dcs-decoder.didomi.io/",
+  );
   await page.evaluate(() => {
     localStorage.setItem("didomi_dcs", "unrelated-default-value");
     localStorage.setItem("custom_dcs", "DCS.payload.user~signature");
@@ -781,6 +785,12 @@ test("DCS reads configured browser storage and preserves signed values for copyi
   await expect(page.locator("#dcs-string-status")).toContainText(
     "local storage “custom_dcs”",
   );
+
+  const decoderURL = new URL(
+    await page.locator("#decode-dcs-string").getAttribute("href"),
+  );
+  expect(decoderURL.origin).toBe("https://dcs-decoder.didomi.io");
+  expect(decoderURL.searchParams.get("dcs")).toBe("DCS.payload.user~signature");
   await page.locator("#copy-dcs-string").click();
   expect(await page.evaluate(() => window.copiedString)).toBe(
     "DCS.payload.user~signature",
@@ -795,6 +805,11 @@ test("DCS reads configured browser storage and preserves signed values for copyi
   await expect(page.locator("#dcs-string-status")).toContainText(
     "Cookie and local storage values differ",
   );
+  expect(
+    new URL(
+      await page.locator("#decode-dcs-string").getAttribute("href"),
+    ).searchParams.get("dcs"),
+  ).toBe("other.payload~signature");
   await page.evaluate(() => {
     window.Didomi.getConfig = () => {
       throw Error("Config unavailable");
@@ -808,6 +823,10 @@ test("DCS reads configured browser storage and preserves signed values for copyi
   await expect(page.locator("#copy-dcs-string")).toBeDisabled();
   await expect(page.locator("#dcs-string-status")).toContainText(
     "Config unavailable",
+  );
+  await expect(page.locator("#decode-dcs-string")).toHaveAttribute(
+    "href",
+    "https://dcs-decoder.didomi.io/",
   );
   await expect(page.locator("#tc-string")).toHaveValue("TC-still-available");
 });

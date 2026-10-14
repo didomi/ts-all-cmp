@@ -718,6 +718,7 @@ SDK not loaded.</pre>
                   Copy DCS string
                 </button>
                 <a
+                  id="decode-dcs-string"
                   href="https://dcs-decoder.didomi.io/"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -726,11 +727,12 @@ SDK not loaded.</pre>
               </div>
               <p class="hint">
                 After refreshing, the TC and GPP decoder links open the
-                displayed string directly using the part of the URL after #.
-                With no string available, they open the blank decoder. For DCS,
-                copy the string and paste it into Didomi’s decoder. If no string
-                is returned, check the framework settings for the regulation
-                used by your published Flow.
+                displayed string directly using the part of the URL after #. The
+                DCS link includes the displayed string in the dcs query
+                parameter, which is sent to Didomi’s decoder when you open it.
+                With no string available, links open the blank decoder. If no
+                string is returned, check the framework settings for the
+                regulation used by your published Flow.
               </p>
             </section>
           </section>

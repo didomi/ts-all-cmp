@@ -46,9 +46,16 @@ export function createConsentStrings(section) {
       framework: "IAB TCF",
     },
     { key: "gpp_string", id: "gpp-string", name: "GPP", framework: "GPP" },
-    { id: "dcs-string", name: "DCS", read: readStoredDCS },
+    {
+      id: "dcs-string",
+      name: "DCS",
+      read: readStoredDCS,
+      decoderBase: "https://dcs-decoder.didomi.io/",
+      decoderParam: "dcs",
+    },
   ].map((entry) => ({
     ...entry,
+    decoderBase: entry.decoderBase ?? "https://iabgpp.com/#",
     output: section.querySelector(`#${entry.id}`),
     copy: section.querySelector(`#copy-${entry.id}`),
     status: section.querySelector(`#${entry.id}-status`),
@@ -58,7 +65,7 @@ export function createConsentStrings(section) {
     for (const entry of entries) {
       entry.output.value = "";
       entry.copy.disabled = true;
-      if (entry.decoder) entry.decoder.href = "https://iabgpp.com/#";
+      if (entry.decoder) entry.decoder.href = entry.decoderBase;
     }
   }
   refresh.addEventListener("click", async () => {
@@ -85,8 +92,12 @@ export function createConsentStrings(section) {
         entry.output.value = present ? value : "";
         entry.copy.disabled = !present;
         if (entry.decoder) {
-          const url = new URL("https://iabgpp.com/#");
-          if (present) url.hash = value;
+          const url = new URL(entry.decoderBase);
+          if (present) {
+            if (entry.decoderParam)
+              url.searchParams.set(entry.decoderParam, value);
+            else url.hash = value;
+          }
           entry.decoder.href = url.href;
         }
         entry.status.textContent = stored
