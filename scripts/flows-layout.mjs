@@ -45,5 +45,17 @@ export function createWorkspace() {
   }
   window.addEventListener("hashchange", fromHash);
   fromHash();
+  if (history.state?.flowsApplyReload) {
+    history.replaceState(null, "", location.href);
+    const landOnTest = () => {
+      requestAnimationFrame(() => {
+        document.getElementById("runtime-title").focus({ preventScroll: true });
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+        history.scrollRestoration = "auto";
+      });
+    };
+    if (document.readyState === "complete") landOnTest();
+    else window.addEventListener("load", landOnTest, { once: true });
+  }
   return { activate };
 }

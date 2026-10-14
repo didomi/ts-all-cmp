@@ -38,6 +38,33 @@ async function openSetup(page) {
   );
 }
 
+test("applying setup opens the test workspace at the top with a focused heading", async ({
+  page,
+}) => {
+  await mockSDK(page);
+  await page.goto("/flows.html?apiKey=key&flow_id=flow#setup");
+  await openSetup(page);
+  const apply = page.getByRole("button", {
+    name: "Apply and reload",
+    exact: true,
+  });
+  await apply.scrollIntoViewIfNeeded();
+  expect(await page.evaluate(() => window.scrollY > 100)).toBe(true);
+  await Promise.all([page.waitForEvent("load"), apply.click()]);
+  await expect(
+    page.getByRole("tab", { name: "2. Test & Troubleshoot" }),
+  ).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator("#runtime-title")).toBeFocused();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  expect(await page.evaluate(() => location.hash)).toBe("#test");
+  expect(await page.evaluate(() => history.state)).toBe(null);
+  // The one-time landing must not affect subsequent tab navigation.
+  await openSetup(page);
+  await expect(
+    page.getByRole("tab", { name: "1. Setup", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
+});
+
 test("loader options explain GVL, forward it to loader.js and reject irrelevant shared options", async ({
   page,
 }) => {

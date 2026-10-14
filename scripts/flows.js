@@ -182,7 +182,9 @@ form.addEventListener("submit", (event) => {
   // Reload even if the URL was already updated while editing.
   const next = shareURL(state, location.href);
   next.hash = "test";
-  history.replaceState(null, "", next);
+  history.replaceState({ flowsApplyReload: true }, "", next);
+  // Do not restore the long setup form's scroll position in the test workspace.
+  history.scrollRestoration = "manual";
   location.reload();
 });
 document.querySelector("#copy-link").addEventListener("click", async () => {
