@@ -108,7 +108,7 @@ export function checkConfig(config, state = {}) {
         "error",
         "Widget has no usable bundle URL",
         `Widget ${id}${definition.versionId ? " has a version reference but" : ""} has neither a usable bundleUrls[0] nor bundleUrl.`,
-        "In Flows → Privacy Widgets, verify the assigned widget and save it in the widget editor. Apply any resource updates offered by the Flow, save, and publish to the selected environment. If publication succeeds but this remains, contact support with this config and test settings; no JSON workaround is required.",
+        "In Flows → Privacy Widgets, confirm the intended widget is assigned and verify a successful publication to the environment selected here. If those are already correct, this finding does not establish an editor mistake: contact support to investigate missing published display assets. No arbitrary widget edit or manual asset URL is required.",
       );
     } else {
       try {
@@ -242,7 +242,7 @@ export function eventSuggestion(entry) {
   if (entry.kind === "Content security policy")
     return "Check the page’s Content Security Policy and allow the required SDK and widget resource origins.";
   if (/no bundle url|invalid bundle url/i.test(message))
-    return "Check the assigned widget in Flows → Privacy Widgets, save it in the widget editor, apply offered Flow updates, and publish to the selected environment. If it persists after successful publication, contact support; do not paste a guessed asset URL.";
+    return "Check the assignment in Flows → Privacy Widgets and confirm successful publication to the selected environment. If both are correct, contact support to investigate the published display assets. This message alone does not establish an editor mistake; do not make arbitrary edits or paste a guessed asset URL.";
   if (/no widgets are configured|not found in catalog/i.test(message))
     return "In Flows → Regulations, check territory coverage. In Flows → Privacy Widgets, check assignments and the default widget, then publish to the selected environment. Compare any explicit sandbox Widget ID with those assignments.";
   if (

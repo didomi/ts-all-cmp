@@ -49,6 +49,10 @@ test("incomplete published assets and broken assignments produce Console actions
     findings.find((f) => f.id === "widget-bundle-widget").suggestion,
     /Flows → Privacy Widgets/,
   );
+  assert.match(
+    findings.find((f) => f.id === "widget-bundle-widget").suggestion,
+    /does not establish an editor mistake/,
+  );
   assert.ok(findings.every((f) => f.evidence && f.suggestion));
 });
 test("bad response shapes are diagnosed without throwing and unsafe asset URLs are rejected", () => {
