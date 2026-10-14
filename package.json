@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
+    "test:flows": "node --test tests/flows-state.test.mjs tests/flows-checks.test.mjs && playwright test --config=playwright.flows.config.js",
     "prettier": "prettier --write ."
   },
   "authors": "David Tessier and Pierre Vanoverschelde",
