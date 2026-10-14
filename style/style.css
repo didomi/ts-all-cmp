@@ -221,7 +221,8 @@ input:first-child {
   justify-content: space-between;
   margin: 40px 0 0 0;
 }
-#controls > div {
+#controls > div,
+.consent-flow-button {
   transition-duration: 0.3s;
   border: 1px solid var(--border);
   text-align: center;
@@ -233,7 +234,19 @@ input:first-child {
   background-color: var(--light-bg);
   color: var(--text);
 }
-#controls > div:hover {
+.consent-flow-button {
+  position: fixed;
+  align-self: flex-start;
+  margin: 24px 0 0;
+  right: 24px;
+  width: auto;
+  z-index: 1001;
+  text-decoration: none;
+  border-color: #999999;
+  color: #444444;
+}
+#controls > div:hover,
+.consent-flow-button:hover {
   color: #000000;
   background-color: #ffffff;
 }
