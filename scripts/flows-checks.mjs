@@ -153,6 +153,20 @@ export function checkConfig(config, state = {}) {
       "In Flows → Privacy Widgets, review and save the display rules. Publish to the selected environment and retest without sandbox JSON overrides. Contact support if the published rules remain incomplete.",
     );
   const rules = Array.isArray(config.rules) ? config.rules : [];
+  if (
+    ids.length &&
+    (config.rules === undefined ||
+      (Array.isArray(config.rules) && config.rules.length === 0))
+  )
+    add(
+      "widget-rules-empty",
+      "warning",
+      "No display rules may prevent widget initialization",
+      config.rules === undefined
+        ? "The widget catalog is present, but rules is missing."
+        : "The widget catalog is present, but rules is an empty array ([]).",
+      "Some SDK builds skip Flow widget initialization when no display rules are present, even with a valid default widget and bundle URL. The SDK can still load and display a legacy fallback notice, while Show widget may report no widgets configured. In Flows → Privacy Widgets → Rules engine, review the intended display rules and confirm the selected environment was published. If a default-widget-only Flow is intentional, ask support to confirm the expected behavior for this SDK version; this finding alone does not establish a setup error or require an arbitrary rule.",
+    );
   rules.forEach((rule, index) => {
     if (!isObject(rule) || !rule.targetWidgetId) {
       add(
@@ -177,7 +191,7 @@ export function checkConfig(config, state = {}) {
       "warning",
       "No rules or default widget select a widget",
       "Widgets are present, but no rules or defaultWidgetId were returned.",
-      "In Flows → Privacy Widgets, configure a default widget and review the display rules and priorities. Save and publish. An explicit Widget ID in this sandbox can help isolate a selection issue.",
+      "In Flows → Privacy Widgets, configure a default widget and review the display rules and priorities. Save and publish. An explicit Widget ID does not bypass widget initialization in all SDK versions.",
     );
   if (rules.length && rules.every((rule) => rule?.triggerMode === "manual"))
     add(

@@ -119,3 +119,29 @@ test("runtime suggestions distinguish Console actions from browser restrictions"
     /hid details/,
   );
 });
+
+test("empty or missing rules warn about widget initialization even with a valid default and asset", () => {
+  for (const rules of [[], undefined]) {
+    const config = { ...valid(), rules };
+    const finding = checkConfig(config).find(
+      (f) => f.id === "widget-rules-empty",
+    );
+    assert.equal(finding.severity, "warning");
+    assert.match(
+      finding.suggestion,
+      /even with a valid default widget and bundle URL/,
+    );
+    assert.match(finding.suggestion, /SDK can still load/);
+    assert.match(finding.suggestion, /confirm the expected behavior/);
+    assert.match(finding.suggestion, /does not establish a setup error/);
+  }
+  for (const config of [
+    valid(),
+    { ...valid(), rules: "invalid" },
+    { app: { apiKey: "key" }, regulation: { name: "gdpr" }, rules: [] },
+  ])
+    assert.equal(
+      checkConfig(config).some((f) => f.id === "widget-rules-empty"),
+      false,
+    );
+});

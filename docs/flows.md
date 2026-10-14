@@ -73,6 +73,10 @@ Runtime capture starts before the SDK and main page module load. It records cons
 
 Technical evidence is available for support and site developers. Cross-origin restrictions may hide error details and resource events do not reveal HTTP response status. No customer presets, private repository references, internal service descriptions, or issue-tracker links are included.
 
+### Empty or missing display rules
+
+When a delivered config includes widgets but has `rules: []` or no `rules` property, troubleshooting shows a warning. Some SDK builds skip widget initialization in this case, even with a valid default widget and bundle URL. The SDK itself can still become ready and display a legacy fallback notice; widget display or Show widget can fail. This is a possible cause, not a declaration that the config is invalid or that the behavior is intended. Review the configured rules and publication in Console; for an intentional default-widget-only Flow, confirm expected behavior and SDK version with support rather than adding an arbitrary rule.
+
 ## Development and verification
 
 ```sh
@@ -88,7 +92,7 @@ The dedicated suite runs Node contract tests and headless browser tests with an 
 
 ### Verification on 2026-10-14
 
-All 15 Node checks and 20 browser scenarios passed. Browser scenarios ran through the connected Playwright browser with an assertion adapter because the local CLI could not launch Chromium under the session’s macOS sandbox. Formatting and diff checks passed. Desktop and mobile views were inspected, including a 390px viewport.
+All 16 Node checks and 21 browser scenarios passed. Browser scenarios ran through the connected Playwright browser with an assertion adapter because the local CLI could not launch Chromium under the session’s macOS sandbox. Formatting and diff checks passed. Desktop and mobile views were inspected, including a 390px viewport.
 
 Live production SDK spot checks covered regulation selection, configuration inspection, CTV fallback dismissal, and consent string retrieval. Successful widget rendering is covered with an intercepted SDK; the supplied live Flow had missing widget display assets and reproduced the corresponding troubleshooting findings. No customer account identifiers or test keys are included in source or documentation.
 

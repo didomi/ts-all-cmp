@@ -893,3 +893,26 @@ test("URL-pattern tester overrides only the query context and leaves page and wi
     "This SDK version does not provide rules testing",
   );
 });
+
+test("troubleshooting explains empty rules as a possible widget initialization cause", async ({
+  page,
+}) => {
+  await mockSDK(page, {
+    app: { apiKey: "key" },
+    regulation: { name: "gdpr" },
+    widgets: { widget: { bundleUrl: "https://example.com/widget.js" } },
+    defaultWidgetId: "widget",
+    rules: [],
+  });
+  await page.goto("/flows.html?apiKey=key&flow_id=flow#test");
+  await expect(page.locator("#status")).toContainText("SDK ready");
+  await expect(page.locator("#config-findings")).toContainText(
+    "No display rules may prevent widget initialization",
+  );
+  await expect(page.locator("#config-findings")).toContainText(
+    "SDK can still load",
+  );
+  await expect(page.locator("#config-findings")).toContainText(
+    "confirm the expected behavior",
+  );
+});
