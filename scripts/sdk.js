@@ -16,6 +16,7 @@ function writeSDK(
   gppStub,
   ctvPlatform,
   preprod,
+  loaderUrl,
 ) {
   loadGPPStub(gppStub, "scripts/gpp_stub.js");
   const _base = preprod ? "https://sdk" : "https://sdk.";
@@ -111,15 +112,16 @@ function writeSDK(
       a["async"] = true;
       a.charset = "utf-8";
       var o =
+        loaderUrl ||
         _base +
-        _staging +
-        "privacy-center.org/" +
-        e +
-        "/loader.js?" +
-        _ctvPlatform +
-        "target_type=notice&target=" +
-        t;
-      if (window.didomiConfig && window.didomiConfig.user) {
+          _staging +
+          "privacy-center.org/" +
+          e +
+          "/loader.js?" +
+          _ctvPlatform +
+          "target_type=notice&target=" +
+          t;
+      if (!loaderUrl && window.didomiConfig && window.didomiConfig.user) {
         var c = window.didomiConfig.user;
         var s = c.country;
         var d = c.region;
@@ -129,7 +131,7 @@ function writeSDK(
             o = o + "&region=" + d;
           }
         }
-      } else if (userCountry) {
+      } else if (!loaderUrl && userCountry) {
         var s = userCountry;
         var d = userRegion;
         if (s) {
@@ -139,8 +141,10 @@ function writeSDK(
           }
         }
       }
-      r.href = _base + _staging + "privacy-center.org/";
-      n.href = _base + _staging + "privacy-center.org/";
+      r.href = loaderUrl
+        ? new URL(loaderUrl).origin + "/"
+        : _base + _staging + "privacy-center.org/";
+      n.href = r.href;
       i.href = o;
       a.src = o;
       var f = document.getElementsByTagName("script")[0];

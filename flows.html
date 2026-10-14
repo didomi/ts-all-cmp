@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="x-brand-status" content="preview" />
+    <title>Didomi Flows Sandbox</title>
+    <script src="scripts/flows-capture.js"></script>
+    <link rel="icon" href="assets/favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --sandbox-navy: #04092d;
+        --sandbox-blue: #465cee;
+        --sandbox-pale: #f2f4ff;
+        --sandbox-white: #ffffff;
+        --sandbox-surface: #f9fafa;
+        --sandbox-border: #e0e0e0;
+        --sandbox-muted: #1d4153;
+        --sandbox-error: #ed4d43;
+      }
+      :where(#sandbox),
+      :where(#sandbox) * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--sandbox-surface);
+      }
+      #sandbox {
+        max-width: 1440px;
+        margin: auto;
+        padding: 32px 24px 64px;
+      }
+      :where(#sandbox) header,
+      :where(#sandbox) nav,
+      :where(#sandbox) .actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      :where(#sandbox) header {
+        justify-content: space-between;
+        margin-bottom: 32px;
+      }
+      :where(#sandbox) .brand {
+        font-size: 18px;
+        font-weight: 600;
+      }
+      :where(#sandbox) a {
+        color: var(--sandbox-blue);
+      }
+      :where(#sandbox) h1 {
+        font-size: 40px;
+        line-height: 1.2;
+        margin: 0 0 16px;
+        font-weight: 800;
+      }
+      :where(#sandbox) h2,
+      :where(#sandbox) legend {
+        font-size: 18px;
+        font-weight: 600;
+      }
+      :where(#sandbox) p {
+        max-width: 75ch;
+        margin: 0 0 24px;
+      }
+      :where(#sandbox) .intro {
+        margin-bottom: 24px;
+      }
+      :where(#sandbox) .workspace-tabs {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: var(--sandbox-surface);
+        display: flex;
+        gap: 8px;
+        border-bottom: 1px solid var(--sandbox-border);
+        margin-bottom: 24px;
+        padding-bottom: 8px;
+      }
+      :where(#sandbox) .workspace-tabs button {
+        border: 0;
+        background: transparent;
+      }
+      :where(#sandbox) .workspace-tabs button[aria-selected="true"] {
+        background: var(--sandbox-navy);
+        color: var(--sandbox-white);
+      }
+      :where(#sandbox) .setup-layout {
+        display: grid;
+        grid-template-columns: 240px minmax(0, 1fr);
+        gap: 24px;
+        align-items: start;
+      }
+      :where(#sandbox) .setup-sidebar {
+        position: sticky;
+        top: 24px;
+      }
+      :where(#sandbox) .setup-sidebar a {
+        display: block;
+        padding: 8px 0;
+        font-size: 14px;
+      }
+      :where(#sandbox) .setup-group {
+        margin-top: 0;
+        border-bottom: 1px solid var(--sandbox-border);
+        padding: 16px 0;
+        scroll-margin-top: 24px;
+      }
+      :where(#sandbox) .setup-group > summary {
+        font-size: 18px;
+        padding-bottom: 8px;
+      }
+      :where(#sandbox) .setup-group fieldset {
+        margin: 0;
+        padding: 8px 0 16px;
+        border: 0;
+      }
+      :where(#sandbox) .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+      }
+      :where(#sandbox) .test-layout {
+        display: grid;
+        grid-template-columns: minmax(260px, 1fr) minmax(0, 2fr);
+        gap: 32px;
+        align-items: start;
+      }
+      :where(#sandbox) .test-layout > .runtime:first-child {
+        position: sticky;
+        top: 24px;
+      }
+      :where(#sandbox) #runtime-summary {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+        gap: 12px 16px;
+        margin-top: 24px;
+      }
+      :where(#sandbox) #runtime-summary dt {
+        font-size: 14px;
+        color: var(--sandbox-muted);
+      }
+      :where(#sandbox) #runtime-summary dd {
+        margin: 0;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+      }
+      :where(#sandbox) [role="tabpanel"] > .runtime,
+      :where(#sandbox) .test-layout > .runtime {
+        margin-top: 0;
+      }
+      :where(#sandbox) #config-panel > section {
+        background: var(--sandbox-white);
+        padding: 24px;
+        border: 1px solid var(--sandbox-border);
+        border-radius: 16px;
+      }
+      :where(#sandbox) #config-panel .actions {
+        margin-bottom: 16px;
+      }
+      :where(#sandbox) h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 24px 0 8px;
+      }
+      :where(#sandbox) #status {
+        padding: 16px 24px;
+        border: 1px solid var(--sandbox-border);
+        border-radius: 12px;
+        background: var(--sandbox-pale);
+        margin-bottom: 24px;
+        overflow-wrap: anywhere;
+      }
+      :where(#sandbox) #status[data-error="true"] {
+        border-color: var(--sandbox-error);
+      }
+      :where(#sandbox) form {
+        background: var(--sandbox-white);
+        border: 1px solid var(--sandbox-border);
+        border-radius: 16px;
+        padding: 24px;
+      }
+      :where(#sandbox) fieldset {
+        border: 0;
+        border-bottom: 1px solid var(--sandbox-border);
+        padding: 0 0 24px;
+        margin: 0 0 24px;
+        min-width: 0;
+      }
+      :where(#sandbox) legend {
+        padding: 0;
+        margin-bottom: 8px;
+      }
+      :where(#sandbox) .hint,
+      :where(#sandbox) small {
+        color: var(--sandbox-muted);
+        font-size: 14px;
+        overflow-wrap: anywhere;
+      }
+      :where(#sandbox) .fields input,
+      :where(#sandbox) .fields select,
+      :where(#sandbox) .fields textarea {
+        margin-top: 8px;
+      }
+      :where(#sandbox) .fields small {
+        display: block;
+        margin-top: 8px;
+      }
+      :where(#sandbox) .hint {
+        margin-bottom: 16px;
+      }
+      :where(#sandbox) .field-help {
+        margin-top: 8px;
+        font-size: 14px;
+      }
+      :where(#sandbox) .field-help p {
+        white-space: pre-line;
+        margin: 8px 0 0;
+      }
+      :where(#sandbox) .fields {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+      }
+      :where(#sandbox) label {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-weight: 600;
+        min-width: 0;
+      }
+      :where(#sandbox) label small {
+        font-weight: 400;
+      }
+      :where(#sandbox) input,
+      :where(#sandbox) select,
+      :where(#sandbox) textarea,
+      :where(#sandbox) button {
+        font: inherit;
+      }
+      :where(#sandbox) input,
+      :where(#sandbox) select,
+      :where(#sandbox) textarea {
+        width: 100%;
+        color: var(--sandbox-navy);
+        background: var(--sandbox-white);
+        border: 1px solid var(--sandbox-border);
+        border-radius: 6px;
+        padding: 12px;
+      }
+      :where(#sandbox) textarea {
+        resize: vertical;
+        min-height: 128px;
+      }
+      :where(#sandbox) .wide {
+        grid-column: 1 / -1;
+      }
+      :where(#sandbox) button {
+        padding: 12px 16px;
+        border-radius: 6px;
+        border: 1px solid var(--sandbox-border);
+        background: var(--sandbox-white);
+        color: var(--sandbox-navy);
+        cursor: pointer;
+        font-weight: 600;
+      }
+      :where(#sandbox) button.primary {
+        background: var(--sandbox-blue);
+        color: var(--sandbox-white);
+        border-color: var(--sandbox-blue);
+      }
+      :where(#sandbox) form > .actions {
+        padding: 16px 0;
+        background: var(--sandbox-white);
+        border-top: 1px solid var(--sandbox-border);
+      }
+      :where(#sandbox) button:disabled {
+        cursor: default;
+        opacity: 0.5;
+      }
+      :where(#sandbox) :focus-visible {
+        outline: 2px solid var(--sandbox-blue);
+        outline-offset: 4px;
+      }
+      :where(#sandbox) .runtime {
+        margin: 32px 0;
+      }
+      :where(#sandbox) .runtime h2 {
+        margin-bottom: 16px;
+      }
+      :where(#sandbox) details {
+        margin-top: 24px;
+      }
+      :where(#sandbox) summary {
+        cursor: pointer;
+        font-weight: 600;
+      }
+      :where(#sandbox) pre {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        background: var(--sandbox-pale);
+        padding: 16px;
+        border-radius: 12px;
+        font: inherit;
+        font-size: 14px;
+      }
+      :where(#sandbox) #loaded-config {
+        max-height: 560px;
+        overflow: auto;
+      }
+      :where(#sandbox) [hidden] {
+        display: none !important;
+      }
+      :where(#sandbox) #config-tree {
+        max-height: 560px;
+        overflow: auto;
+        overflow-wrap: anywhere;
+        background: var(--sandbox-pale);
+        padding: 16px;
+        margin-top: 16px;
+        border-radius: 12px;
+        font-size: 14px;
+      }
+      :where(#sandbox) #config-tree details {
+        margin: 0;
+      }
+      :where(#sandbox) #config-tree summary {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      :where(#sandbox) .json-children {
+        margin-left: 8px;
+        padding-left: 16px;
+        border-left: 1px solid var(--sandbox-border);
+      }
+      :where(#sandbox) .json-leaf {
+        padding: 4px 0;
+      }
+      :where(#sandbox) .json-string {
+        color: var(--sandbox-muted);
+      }
+      :where(#sandbox) .json-number,
+      :where(#sandbox) .json-boolean {
+        color: var(--sandbox-blue);
+      }
+      :where(#sandbox) button[aria-pressed="true"] {
+        background: var(--sandbox-pale);
+        border-color: var(--sandbox-blue);
+      }
+      :where(#sandbox) #config-findings,
+      :where(#sandbox) #runtime-events {
+        list-style: none;
+        padding: 0;
+      }
+      :where(#sandbox) #config-findings > li,
+      :where(#sandbox) #runtime-events > li {
+        border-bottom: 1px solid var(--sandbox-border);
+        padding: 16px 0;
+        overflow-wrap: anywhere;
+      }
+      :where(#sandbox) #config-findings p,
+      :where(#sandbox) #runtime-events p {
+        margin: 8px 0 0;
+        font-size: 14px;
+      }
+      :where(#sandbox) #runtime-events details {
+        margin: 0;
+      }
+      :where(#sandbox) #runtime-events pre {
+        max-height: 240px;
+        overflow: auto;
+      }
+      :where(#sandbox) li[data-severity="error"] > strong {
+        color: var(--sandbox-error);
+      }
+      :where(#sandbox) #share-url {
+        min-height: 96px;
+      }
+      :where(#sandbox) footer {
+        margin-top: 32px;
+        font-size: 14px;
+        color: var(--sandbox-muted);
+      }
+      @media (max-width: 640px) {
+        #sandbox {
+          padding: 24px 16px;
+        }
+        :where(#sandbox) h1 {
+          font-size: 32px;
+        }
+        :where(#sandbox) .fields {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        :where(#sandbox) form {
+          padding: 16px;
+        }
+      }
+      @media (max-width: 960px) {
+        :where(#sandbox) .setup-layout,
+        :where(#sandbox) .test-layout {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        :where(#sandbox) .setup-sidebar,
+        :where(#sandbox) .test-layout > .runtime:first-child {
+          position: static;
+        }
+        :where(#sandbox) #setup-navigation {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 16px;
+        }
+        :where(#sandbox) .workspace-tabs {
+          flex-wrap: wrap;
+        }
+      }
+
+      #sandbox {
+        color: var(--sandbox-navy);
+        font:
+          16px/1.6 "Montserrat",
+          sans-serif;
+      }
+      #sandbox #hide-preview {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 2147483647;
+        background: var(--sandbox-white);
+        color: var(--sandbox-navy);
+        border: 1px solid var(--sandbox-border);
+        box-shadow: 0 2px 8px rgba(4, 9, 45, 0.15);
+      }
+      /* A dismissed CTV host can remain full-screen after its UI is removed. */
+      #sandbox #consent-strings {
+        border-top: 1px solid var(--sandbox-border);
+        margin-top: 24px;
+        padding-top: 8px;
+      }
+      #sandbox #consent-strings label {
+        display: block;
+        margin-top: 24px;
+      }
+      #sandbox #consent-strings textarea {
+        width: 100%;
+        font-family: monospace;
+      }
+      #sandbox #consent-strings .actions {
+        margin-bottom: 16px;
+      }
+      #sandbox #widget-problem {
+        max-width: 34rem;
+        width: calc(100% - 4rem);
+        border: 1px solid var(--sandbox-border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        color: var(--sandbox-navy);
+        background: var(--sandbox-white);
+      }
+      #sandbox #widget-problem::backdrop {
+        background: rgb(0 0 0 / 55%);
+      }
+      #didomi-host[data-sandbox-preview-dismissed="true"] {
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="sandbox">
+      <button id="hide-preview" type="button" hidden>Hide preview</button>
+      <header>
+        <span class="brand">Didomi · Developer sandbox</span>
+        <nav>
+          <a href="index.html">Legacy Consent Notices</a
+          ><a href="https://github.com/didomi/ts-all-cmp">Source code</a>
+        </nav>
+      </header>
+      <div class="intro">
+        <h1>Test your Consent Flows</h1>
+        <p>
+          Load a published Flow, override its delivery settings, and inspect its
+          privacy widgets. Changes update your share link. Apply and reload to
+          run them.
+        </p>
+      </div>
+      <div id="status" role="status" aria-live="polite">
+        Enter an API key and Flow ID to start.
+      </div>
+      <div class="workspace-tabs" role="tablist" aria-label="Sandbox workspace">
+        <button
+          id="tab-setup"
+          role="tab"
+          data-panel="setup"
+          aria-controls="setup-panel"
+          aria-selected="true"
+        >
+          1. Setup
+        </button>
+        <button
+          id="tab-test"
+          role="tab"
+          data-panel="test"
+          aria-controls="test-panel"
+          aria-selected="false"
+          tabindex="-1"
+        >
+          2. Test &amp; troubleshoot
+        </button>
+        <button
+          id="tab-config"
+          role="tab"
+          data-panel="config"
+          aria-controls="config-panel"
+          aria-selected="false"
+          tabindex="-1"
+        >
+          3. Configuration
+        </button>
+      </div>
+      <div id="setup-panel" role="tabpanel" aria-labelledby="tab-setup">
+        <div class="setup-layout">
+          <aside class="setup-sidebar">
+            <h2>Test settings</h2>
+            <p class="hint">
+              Start with the Flow details from Console → Flows → Publishing. Add
+              overrides only for the scenario you want to test.
+            </p>
+            <nav id="setup-navigation" aria-label="Setup sections"></nav>
+            <p class="hint">
+              Apply and reload opens the test workspace. Draft settings here do
+              not change your published Flow.
+            </p>
+          </aside>
+          <form id="flow-form">
+            <div id="field-groups"></div>
+            <div class="actions">
+              <button class="primary" type="submit">Apply and reload</button
+              ><button id="copy-link" type="button">Copy share link</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="test-panel" role="tabpanel" aria-labelledby="tab-test" hidden>
+        <div class="test-layout">
+          <section class="runtime" aria-labelledby="runtime-title">
+            <h2 id="runtime-title">Widget controls</h2>
+            <p class="hint">
+              Uses the settings from the last page load. Widget ID and layer
+              name are optional; leave them empty to let Flow rules select the
+              widget.
+            </p>
+            <div class="actions">
+              <button id="show-widget" disabled>Show widget</button
+              ><button id="hide-widget" disabled>Hide widget</button
+              ><button id="reset-consent" disabled>
+                Reset consent and reload
+              </button>
+            </div>
+            <dl id="runtime-summary">
+              <dt>SDK</dt>
+              <dd>Not loaded</dd>
+            </dl>
+            <details>
+              <summary>Runtime details</summary>
+              <p class="hint" id="runtime-info-description">
+                This sandbox generates the JSON summary below from the loaded
+                SDK, your test settings, and the browser’s Global Privacy
+                Control signal. It shows the selected regulation, whether a
+                widget or notice is visible, available widget IDs, display-rule
+                count, and widgets missing a display asset URL. The loaded
+                settings are those applied at the last page load; unsaved form
+                edits are not included. A null value means that information was
+                unavailable. These are debugging observations, not confirmation
+                that your Console setup is correct. For the full
+                Didomi.getConfig() response, open tab 3, “Configuration.”
+              </p>
+              <pre
+                id="runtime-info"
+                aria-describedby="runtime-info-description"
+              >
+SDK not loaded.</pre>
+            </details>
+            <section
+              id="consent-strings"
+              aria-labelledby="consent-strings-title"
+            >
+              <h3 id="consent-strings-title">Consent strings</h3>
+              <p class="hint">
+                Read the encoded IAB Transparency and Consent (TC) and Global
+                Privacy Platform (GPP) strings for this browser using
+                Didomi.getCurrentUserStatus(). These are a snapshot of the
+                current SDK state. The Didomi Consent String (DCS) below is read
+                separately from this browser’s saved storage. Reading these
+                strings does not accept, reject, or reset consent. A returned
+                string alone does not mean the visitor agreed to everything.
+              </p>
+              <button id="read-consent-strings" type="button" disabled>
+                Refresh consent strings
+              </button>
+              <p id="consent-strings-status" class="hint" role="status">
+                Load a Flow and wait for the SDK to be ready.
+              </p>
+              <label for="tc-string">TC string (IAB TCF)</label>
+              <textarea
+                id="tc-string"
+                rows="3"
+                readonly
+                spellcheck="false"
+                aria-describedby="tc-string-status"
+                placeholder="Read the current strings to see a value here."
+              ></textarea>
+              <p id="tc-string-status" class="hint" role="status">
+                Not read yet.
+              </p>
+              <div class="actions">
+                <button id="copy-tc-string" type="button" disabled>
+                  Copy TC string
+                </button>
+                <a
+                  id="decode-tc-string"
+                  href="https://iabgpp.com/#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Open TC decoder (new tab)</a
+                >
+              </div>
+              <label for="gpp-string">GPP string</label>
+              <textarea
+                id="gpp-string"
+                rows="3"
+                readonly
+                spellcheck="false"
+                aria-describedby="gpp-string-status"
+                placeholder="Read the current strings to see a value here."
+              ></textarea>
+              <p id="gpp-string-status" class="hint" role="status">
+                Not read yet.
+              </p>
+              <div class="actions">
+                <button id="copy-gpp-string" type="button" disabled>
+                  Copy GPP string
+                </button>
+                <a
+                  id="decode-gpp-string"
+                  href="https://iabgpp.com/#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Open GPP decoder (new tab)</a
+                >
+              </div>
+              <label for="dcs-string">DCS (Didomi Consent String)</label>
+              <textarea
+                id="dcs-string"
+                rows="3"
+                readonly
+                spellcheck="false"
+                aria-describedby="dcs-string-help dcs-string-status"
+                placeholder="Read the current strings to see a saved DCS here."
+              ></textarea>
+              <p id="dcs-string-help" class="hint">
+                DCS stores Didomi consent choices. This tool reads the saved
+                cookie or local storage value using the storage name in the
+                loaded configuration (normally didomi_dcs). It is not returned
+                by getCurrentUserStatus(). Copy preserves the complete value,
+                including any signature. Reading or using the decoder does not
+                save new choices in this Flow.
+              </p>
+              <p id="dcs-string-status" class="hint" role="status">
+                Not read yet.
+              </p>
+              <div class="actions">
+                <button id="copy-dcs-string" type="button" disabled>
+                  Copy DCS string
+                </button>
+                <a
+                  href="https://dcs-decoder.didomi.io/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Open Didomi DCS decoder (new tab)</a
+                >
+              </div>
+              <p class="hint">
+                After refreshing, the TC and GPP decoder links open the
+                displayed string directly using the part of the URL after #.
+                With no string available, they open the blank decoder. For DCS,
+                copy the string and paste it into Didomi’s decoder. If no string
+                is returned, check the framework settings for the regulation
+                used by your published Flow.
+              </p>
+            </section>
+          </section>
+          <section
+            id="troubleshooting"
+            class="runtime"
+            aria-labelledby="troubleshooting-title"
+          >
+            <h2 id="troubleshooting-title" tabindex="-1">Troubleshooting</h2>
+            <p class="hint">
+              Start with setup checks in Console. Findings use the returned
+              config; they do not inspect your Console drafts or publication
+              status. Suggestions are checks to try, not confirmed causes.
+            </p>
+            <details>
+              <summary>Console setup checklist</summary>
+              <ol>
+                <li>
+                  <strong>Flows → Publishing:</strong> confirm the organization,
+                  public API key, Flow ID, platform, and staging or production
+                  selection match this test. Confirm publication completed
+                  successfully.
+                </li>
+                <li>
+                  <strong>Flows → Regulations / Regulation Manager:</strong>
+                  check the attached regulation, country and region coverage,
+                  settings, frameworks, vendors, and purposes. Save regulation
+                  edits and apply any updates offered in the Flow.
+                </li>
+                <li>
+                  <strong>Flows → Privacy Widgets:</strong> check each
+                  regulation’s assigned widgets, default widget, priority, and
+                  display rules. Review location, URL, manual display, and any
+                  other conditions. Save widget edits and check language
+                  coverage.
+                </li>
+                <li>
+                  <strong>Brand Manager / Flows → Privacy Widgets:</strong> save
+                  the intended brand profile and theme; confirm the Flow uses
+                  that brand and apply any offered updates.
+                </li>
+                <li>
+                  <strong>Flows → Publishing:</strong> save and publish the
+                  updated Flow to the environment selected here, then reload.
+                  Editing a draft alone does not update a published Flow. Clear
+                  unintended sandbox overrides before comparing results.
+                </li>
+              </ol>
+            </details>
+            <p id="troubleshooting-summary" role="status" aria-live="polite">
+              Waiting for diagnostics. If startup fails, check the messages
+              below and your browser Console.
+            </p>
+            <h3>Setup findings</h3>
+            <ul id="config-findings"></ul>
+            <details>
+              <summary>Technical evidence: captured runtime messages</summary>
+              <button id="clear-runtime-events" type="button">
+                Clear captured messages
+              </button>
+              <ul id="runtime-events"></ul>
+            </details>
+            <p class="hint">
+              Only messages from this page load are available. Cross-origin
+              scripts can hide error details; inspect browser Network and
+              Console for HTTP status, response bodies, and blocked requests.
+              Clearing messages does not change the config or fix an issue.
+            </p>
+          </section>
+        </div>
+      </div>
+      <div
+        id="config-panel"
+        role="tabpanel"
+        aria-labelledby="tab-config"
+        hidden
+      >
+        <section class="runtime" aria-labelledby="loaded-config-title">
+          <h2 id="loaded-config-title">Loaded SDK configuration</h2>
+          <p class="hint">
+            The JSON returned by Didomi.getConfig(), displayed automatically
+            when the SDK is ready. This includes applied runtime overrides; use
+            browser Network to inspect the original downloaded response.
+          </p>
+          <div class="actions">
+            <button id="inspect-config" disabled>Refresh loaded config</button>
+            <button id="copy-config" disabled>Copy JSON</button>
+          </div>
+          <div class="actions" role="group" aria-label="Configuration view">
+            <button id="config-tree-mode" type="button" aria-pressed="true">
+              Tree view
+            </button>
+            <button id="config-plain-mode" type="button" aria-pressed="false">
+              Plain JSON
+            </button>
+            <button
+              id="expand-config"
+              type="button"
+              title="Expand up to 1,000 sections; collections show 100 entries per page"
+            >
+              Expand sections
+            </button>
+            <button id="collapse-config" type="button">
+              Collapse sections
+            </button>
+          </div>
+          <p
+            id="loaded-config-status"
+            class="hint"
+            role="status"
+            aria-live="polite"
+          ></p>
+          <div
+            id="config-tree"
+            tabindex="0"
+            aria-label="Expandable configuration JSON"
+          >
+            The SDK has not loaded a configuration yet.
+          </div>
+          <pre
+            hidden
+            id="loaded-config"
+            tabindex="0"
+            aria-label="Didomi.getConfig() JSON"
+          >
+The SDK has not loaded a configuration yet.</pre>
+        </section>
+        <details open>
+          <summary>Generated loader URL</summary>
+          <pre id="loader-url">Enter an API key and Flow ID.</pre>
+          <p class="hint">
+            A loaded script does not guarantee a matching Flow deployment.
+            Inspect the loaded config to verify the selected regulation and
+            widgets.
+          </p>
+        </details>
+        <details>
+          <summary>Share link</summary>
+          <label for="share-url"
+            >Current settings<textarea id="share-url" readonly></textarea>
+          </label>
+        </details>
+        <details>
+          <summary>Effective window.didomiConfig</summary>
+          <pre id="effective-config">{}</pre>
+          <p class="hint">
+            Explicit sandbox inputs override the custom JSON. Native
+            didomiConfig URL overrides are applied by the SDK afterward, using
+            its allowlist.
+          </p>
+        </details>
+      </div>
+      <footer>
+        Consent Flows for Web and web-based CTV. A Flow must be published in the
+        selected deployment environment. GPC comes from your browser.
+        URL-pattern rules evaluate this page’s pathname. Subject Request Flows
+        use a separate SDK.
+      </footer>
+      <dialog
+        id="widget-problem"
+        aria-labelledby="widget-problem-title"
+        aria-describedby="widget-problem-description widget-problem-detail"
+      >
+        <h2 id="widget-problem-title">Widget could not be displayed</h2>
+        <p id="widget-problem-description">
+          Read the Troubleshooting section on tab 2, “Test &amp; troubleshoot,”
+          for checks to try in Console. Check the Flow’s publishing settings,
+          assigned widgets, and display rules before trying again.
+        </p>
+        <p id="widget-problem-detail"></p>
+        <div class="actions">
+          <button
+            id="widget-problem-troubleshooting"
+            class="primary"
+            type="button"
+          >
+            Read troubleshooting
+          </button>
+          <button id="close-widget-problem" type="button">Close</button>
+        </div>
+      </dialog>
+    </main>
+    <script src="scripts/sdk.js"></script>
+    <script type="module" src="scripts/flows.js"></script>
+  </body>
+</html>
