@@ -45,7 +45,7 @@ Native `didomiConfig.*` URL fields take precedence over the aggregate native `di
 
 Changes update the share URL with `replaceState`; SDK configuration and widget action settings take effect on reload. The page shows the generated loader URL and effective window config, and reports loader failures or a 20-second readiness timeout. A dedicated **Loaded SDK configuration** section automatically displays the full pretty-printed `Didomi.getConfig()` response on SDK readiness and after widget actions. **Refresh loaded config** reads it again, and **Copy JSON** copies the full response (with text-selection fallback if clipboard access is unavailable). The JSON panel scrolls independently within the Configuration tab. A loader returning HTTP 200 is not proof that a matching Flow was resolved: the service can fall back to an API-key-only loader. Verify the loaded regulation and widget config.
 
-GPC comes from `navigator.globalPrivacyControl`. Consent status comes from the SDK consent store; use **Reset consent and reload** for a fresh state. URL-pattern rules use `window.location.pathname`, so rules targeting another site's pathname will not match this sandbox path. No fabricated native query parameters are provided for GPC, consent status, or pathname. To test rule selection for another path, use the URL-pattern tester described below.
+GPC comes from `navigator.globalPrivacyControl`. Consent status comes from the SDK consent store; use **Reset status** on Setup or Test & troubleshoot for a fresh consent state. Both buttons call `Didomi.reset()` and reload, matching the legacy sandbox. The SDK manages its consent cookies and storage; current URL settings and overrides remain in effect. This does not invalidate CDN/browser caches; change **Cache key** when a fresh config response is needed. URL-pattern rules use `window.location.pathname`, so rules targeting another site's pathname will not match this sandbox path. No fabricated native query parameters are provided for GPC, consent status, or pathname. To test rule selection for another path, use the URL-pattern tester described below.
 
 ## Loader options
 
@@ -92,7 +92,7 @@ The dedicated suite runs Node contract tests and headless browser tests with an 
 
 ### Verification on 2026-10-14
 
-All 16 Node checks and 21 browser scenarios passed. Browser scenarios ran through the connected Playwright browser with an assertion adapter because the local CLI could not launch Chromium under the session’s macOS sandbox. Formatting and diff checks passed. Desktop and mobile views were inspected, including a 390px viewport.
+All 16 Node checks and 22 browser scenarios passed. Browser scenarios ran through the connected Playwright browser with an assertion adapter because the local CLI could not launch Chromium under the session’s macOS sandbox. Formatting and diff checks passed. Desktop and mobile views were inspected, including a 390px viewport.
 
 Live production SDK spot checks covered regulation selection, configuration inspection, CTV fallback dismissal, and consent string retrieval. Successful widget rendering is covered with an intercepted SDK; the supplied live Flow had missing widget display assets and reproduced the corresponding troubleshooting findings. No customer account identifiers or test keys are included in source or documentation.
 

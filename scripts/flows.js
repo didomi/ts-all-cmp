@@ -391,12 +391,14 @@ document.querySelector("#hide-preview").addEventListener("click", () =>
     }
   }),
 );
-document.querySelector("#reset-consent").addEventListener("click", () =>
-  runAction(async () => {
-    await window.Didomi.reset();
-    location.reload();
-  }),
-);
+for (const button of document.querySelectorAll("[data-reset-status]")) {
+  button.addEventListener("click", () =>
+    runAction(async () => {
+      await window.Didomi.reset();
+      location.reload();
+    }),
+  );
+}
 document
   .querySelector("#inspect-config")
   .addEventListener("click", renderLoadedConfig);
@@ -434,8 +436,9 @@ async function start() {
     document.querySelector("#show-widget").disabled = false;
     document.querySelector("#hide-widget").disabled =
       typeof window.Didomi?.widgets?.hide !== "function";
-    document.querySelector("#reset-consent").disabled =
-      typeof window.Didomi?.reset !== "function";
+    for (const button of document.querySelectorAll("[data-reset-status]")) {
+      button.disabled = typeof window.Didomi?.reset !== "function";
+    }
     document.querySelector("#inspect-config").disabled =
       typeof window.Didomi?.getConfig !== "function";
     renderRuntime();

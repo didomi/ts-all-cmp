@@ -30,6 +30,7 @@ async function mockSDK(
 
 async function openSetup(page) {
   await page.getByRole("tab", { name: "1. Setup", exact: true }).click();
+  await page.locator("#flow_id").waitFor({ state: "attached" });
   await page.locator(".setup-group").evaluateAll((groups) =>
     groups.forEach((group) => {
       group.open = true;
@@ -353,9 +354,7 @@ test("shareable edits apply on reload, stubs precede loader, and widget API work
   await page
     .getByRole("tab", { name: "2. Test & troubleshoot", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "Reset consent and reload", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Reset status", exact: true }).click();
   await expect
     .poll(() => page.evaluate(() => localStorage.getItem("test-reset")))
     .toBe("yes");
@@ -934,4 +933,29 @@ test("troubleshooting explains empty rules as a possible widget initialization c
   await expect(page.locator("#config-findings")).toContainText(
     "confirm the expected behavior",
   );
+});
+
+test("Setup reset status uses the legacy SDK reset and reloads with the existing test settings", async ({
+  page,
+}) => {
+  const loaders = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/loader.js")) loaders.push(request.url());
+  });
+  await page.goto("/flows.html#setup");
+  await expect(page.locator("#reset-status-setup")).toBeDisabled();
+  await mockSDK(page);
+  await page.goto("/flows.html?apiKey=key&flow_id=flow&country=FR#setup");
+  await expect(page.locator("#status")).toContainText("SDK ready");
+  const originalURL = page.url();
+  const firstLoads = loaders.length;
+  await page.locator("#reset-status-setup").click();
+  await expect.poll(() => loaders.length).toBe(firstLoads + 1);
+  await expect(page.locator("#status")).toContainText("SDK ready");
+  expect(await page.evaluate(() => localStorage.getItem("test-reset"))).toBe(
+    "yes",
+  );
+  expect(page.url()).toBe(originalURL);
+  await expect(page.getByLabel("Flow ID", { exact: true })).toHaveValue("flow");
+  await expect(page.getByLabel("Country", { exact: true })).toHaveValue("FR");
 });

@@ -543,7 +543,23 @@
             <div class="actions">
               <button class="primary" type="submit">Apply and reload</button
               ><button id="copy-link" type="button">Copy share link</button>
+              <button
+                id="reset-status-setup"
+                data-reset-status
+                type="button"
+                disabled
+                aria-describedby="reset-status-help"
+              >
+                Reset status
+              </button>
             </div>
+            <p id="reset-status-help" class="hint">
+              Uses Didomi.reset(), like the legacy sandbox, to reset Didomi’s
+              stored consent state in cookies and storage, then reload the SDK
+              with the current URL settings. Test overrides still apply after
+              reload. Use Cache key if you also need to request a fresh config
+              response.
+            </p>
           </form>
         </div>
       </div>
@@ -559,10 +575,20 @@
             <div class="actions">
               <button id="show-widget" disabled>Show widget</button
               ><button id="hide-widget" disabled>Hide widget</button
-              ><button id="reset-consent" disabled>
-                Reset consent and reload
+              ><button
+                id="reset-consent"
+                data-reset-status
+                type="button"
+                disabled
+                aria-describedby="reset-consent-help"
+              >
+                Reset status
               </button>
             </div>
+            <p id="reset-consent-help" class="hint">
+              Resets Didomi’s stored consent state and reloads the SDK with the
+              current test settings, using the same reset as the legacy sandbox.
+            </p>
             <dl id="runtime-summary">
               <dt>SDK</dt>
               <dd>Not loaded</dd>
