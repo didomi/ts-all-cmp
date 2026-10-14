@@ -811,3 +811,85 @@ test("DCS reads configured browser storage and preserves signed values for copyi
   );
   await expect(page.locator("#tc-string")).toHaveValue("TC-still-available");
 });
+
+test("URL-pattern tester overrides only the query context and leaves page and widget display unchanged", async ({
+  page,
+}) => {
+  await mockSDK(page);
+  await page.goto("/flows.html?apiKey=key&flow_id=flow#test");
+  await expect(page.locator("#status")).toContainText("SDK ready");
+  await page.evaluate(() => {
+    window.pathQueries = [];
+    window.Didomi.widgets.getApplicable = (context) => {
+      window.pathQueries.push(context);
+      if (context.currentUrl === "/checkout")
+        return { widgetId: "checkout-widget", rule: { id: "checkout-rule" } };
+      if (context.currentUrl === "/fallback")
+        return { widgetId: "default-widget", rule: null };
+      if (context.currentUrl === "/error")
+        throw new Error("Rules query failed");
+      return null;
+    };
+    window.didomiOnReady.forEach((callback) => callback());
+  });
+  await page.getByText("URL-pattern test", { exact: true }).click();
+  const path = page.getByLabel("Test pathname", { exact: true });
+  const check = page.getByRole("button", {
+    name: "Check path rules",
+    exact: true,
+  });
+  const originalURL = page.url();
+  await path.fill("/checkout");
+  await check.click();
+  await expect(page.locator("#path-test-status")).toContainText(
+    "checkout-rule matched and selected widget checkout-widget",
+  );
+  expect(await page.evaluate(() => window.pathQueries)).toEqual([
+    { currentUrl: "/checkout" },
+  ]);
+  expect(await page.evaluate(() => window.testCalls)).toEqual([]);
+  expect(page.url()).toBe(originalURL);
+  await page.getByText("Rules test result", { exact: true }).click();
+  await expect(page.locator("#path-test-result")).toContainText(
+    "checkout-widget",
+  );
+  for (const invalid of [
+    "https://example.com/checkout",
+    "//example.com/checkout",
+    "/checkout?x=1",
+    "/checkout#x",
+    "/bad\\path",
+  ]) {
+    await path.fill(invalid);
+    await check.click();
+    await expect(page.locator("#path-test-status")).toContainText(
+      "Enter a pathname",
+    );
+  }
+  expect(await page.evaluate(() => window.pathQueries.length)).toBe(1);
+  await path.fill("/fallback");
+  await check.click();
+  await expect(page.locator("#path-test-status")).toContainText(
+    "No display rule matched; the SDK returned default widget default-widget",
+  );
+  await path.fill("/nothing");
+  await check.click();
+  await expect(page.locator("#path-test-status")).toContainText(
+    "No widget was returned",
+  );
+  await path.fill("/error");
+  await check.click();
+  await expect(page.locator("#path-test-status")).toContainText(
+    "Could not check path rules: Rules query failed",
+  );
+  expect(await page.locator("#path-test-result").textContent()).toBe("");
+  expect(page.url()).toBe(originalURL);
+  await page.evaluate(() => {
+    window.Didomi.widgets.getApplicable = undefined;
+    window.didomiOnReady.forEach((callback) => callback());
+  });
+  await expect(check).toBeDisabled();
+  await expect(page.locator("#path-test-status")).toContainText(
+    "This SDK version does not provide rules testing",
+  );
+});

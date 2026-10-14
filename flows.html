@@ -587,6 +587,44 @@
               >
 SDK not loaded.</pre>
             </details>
+            <details id="path-test">
+              <summary>URL-pattern test</summary>
+              <p class="hint" id="test-path-help">
+                Try a path such as /checkout or /news/article without leaving
+                this sandbox. This asks the SDK which widget its loaded rules
+                would select for that path, keeping the other current visitor
+                details and consent choices. Use only the path, without a
+                website domain, query string, or # fragment.
+              </p>
+              <label for="test-path">Test pathname</label>
+              <input
+                id="test-path"
+                type="text"
+                aria-describedby="test-path-help"
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <button id="check-path" type="button" disabled>
+                Check path rules
+              </button>
+              <p id="path-test-status" class="hint" role="status">
+                Load a Flow and wait for the SDK to be ready.
+              </p>
+              <details hidden>
+                <summary>Rules test result</summary>
+                <pre id="path-test-result"></pre>
+              </details>
+              <p class="hint">
+                This is a rule-selection check using
+                Didomi.widgets.getApplicable({ currentUrl: testPath }). It does
+                not change automatic display, the Show widget button, your
+                published Flow, or this page’s address. A selected widget can
+                still fail to display if its published assets are missing.
+                Change other test settings in Setup and apply them before
+                checking again. The test path is temporary and is not included
+                in the share link.
+              </p>
+            </details>
             <section
               id="consent-strings"
               aria-labelledby="consent-strings-title"
@@ -847,9 +885,10 @@ The SDK has not loaded a configuration yet.</pre>
       </div>
       <footer>
         Consent Flows for Web and web-based CTV. A Flow must be published in the
-        selected deployment environment. GPC comes from your browser.
-        URL-pattern rules evaluate this page’s pathname. Subject Request Flows
-        use a separate SDK.
+        selected deployment environment. GPC comes from your browser. Automatic
+        display and Show widget evaluate this page’s pathname. Use URL-pattern
+        test on tab 2 to check rule selection for a different path. Subject
+        Request Flows use a separate SDK.
       </footer>
       <dialog
         id="widget-problem"

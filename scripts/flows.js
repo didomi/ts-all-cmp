@@ -12,6 +12,7 @@ import {
 import { createJSONViewer } from "./flows-json-viewer.mjs";
 import { createTroubleshooting } from "./flows-troubleshooting.mjs";
 import { createConsentStrings } from "./flows-consent-strings.mjs";
+import { createPathTest } from "./flows-path-test.mjs";
 import { createWorkspace } from "./flows-layout.mjs";
 
 const form = document.querySelector("#flow-form");
@@ -20,6 +21,7 @@ const info = document.querySelector("#runtime-info");
 const consentStrings = createConsentStrings(
   document.querySelector("#consent-strings"),
 );
+const pathTest = createPathTest(document.querySelector("#path-test"));
 const controls = new Map();
 const initial = readState(new URLSearchParams(location.search));
 let applied;
@@ -427,6 +429,7 @@ async function start() {
   window.didomiOnReady.push(() => {
     ready = true;
     consentStrings.setReady();
+    pathTest.setReady();
     clearTimeout(readyTimer);
     document.querySelector("#show-widget").disabled = false;
     document.querySelector("#hide-widget").disabled =

@@ -201,7 +201,7 @@ export function checkConfig(config, state = {}) {
       "info",
       "Some rules depend on the page path",
       `This sandbox is testing pathname ${state.pathname || "/"}.`,
-      "In Flows → Privacy Widgets, review the URL/path conditions along with country, authentication, age, and other conditions. Confirm this sandbox page is expected to match. This check does not identify a winning rule.",
+      "In Flows → Privacy Widgets, review the URL/path conditions along with country, authentication, age, and other conditions. Use URL-pattern test on this tab to check a different pathname. Automatic display still uses this sandbox’s real path. This finding does not identify a winning rule.",
     );
   if (config.notice?.enable === false)
     add(
