@@ -4,9 +4,7 @@ The website https://didomi.github.io/ts-all-cmp enables you to test, share, and 
 
 ## Consent Flows
 
-Open [the Flows sandbox](flows.html) to test published Consent Flows with deployment, geo, regulation, language, brand, SDK URL, and rules-context overrides. It includes share links, generated loader URLs, and `Didomi.widgets` controls. The original page continues to test legacy Consent Notices.
-
-See [Flows setup, query parameters, troubleshooting, and tests](docs/flows.md) for details. Run the isolated Flows checks with `npm run test:flows` after installing dependencies and the Playwright Chromium browser.
+Open the [Consent Flows sandbox](https://didomi.github.io/ts-consent-flows/) to test Consent Flows. Its source, documentation, and tests are maintained separately in [ts-consent-flows](https://github.com/didomi/ts-consent-flows).
 
 ## 🔧 How to Use
 
